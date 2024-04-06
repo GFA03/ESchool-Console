@@ -22,6 +22,15 @@ public class Person {
         this.phoneNumber = phoneNumber;
     }
 
+    protected Person(Person person) {
+        this.id = person.id;
+        this.firstName = person.firstName;
+        this.lastName = person.lastName;
+        this.dateOfBirth = person.dateOfBirth;
+        this.email = person.email;
+        this.phoneNumber = person.phoneNumber;
+    }
+
     public int getAge() {
         return Math.abs(Period.between(LocalDate.now(), this.dateOfBirth).getYears());
     }
