@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PersonTests {
     @Test
-    public void givenDateOfBirth_whenConstructing_thenCheckDateOfBirth() {
+    public void givenPerson_whenConstructing_thenCheckEveryField() {
         Person person = new Person("John", "Doe", "1990-01-01", "john.doe@example.com", "1234567890");
 
         assertEquals("John", person.getFirstName());
