@@ -4,14 +4,17 @@ import java.util.Objects;
 
 public class Student extends Person{
     private Parent parent;
-    public Student(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent) {
+    private Group group;
+    public Student(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
         super(firstName, lastName, dateOfBirth, email, phoneNumber);
         this.parent = parent;
+        this.group = group;
     }
 
     public Student(Student student) {
         super((Person)(student));
         this.parent = student.parent;
+        this.group = student.group;
     }
 
     @Override
@@ -20,18 +23,20 @@ public class Student extends Person{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Student student = (Student) o;
-        return Objects.equals(parent, student.parent);
+        return Objects.equals(parent, student.parent) && Objects.equals(group, student.group);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), parent);
+        return Objects.hash(super.hashCode(), parent, group);
     }
+
 
     @Override
     public String toString() {
         return super.toString() + "Student{" +
                 "parent=" + parent +
+                ", group=" + group +
                 '}';
     }
 }
