@@ -8,9 +8,9 @@ public class ClassAttendance {
     private Student student;
     private ClassSession classSession;
     boolean present;
-    int grade;
+    Integer grade;
 
-    public ClassAttendance(Student student, ClassSession classSession, boolean present, int grade) {
+    public ClassAttendance(Student student, ClassSession classSession, boolean present, Integer grade) {
         this.id = ID_SEQ++;
         this.student = student;
         this.classSession = classSession;
@@ -43,6 +43,9 @@ public class ClassAttendance {
     }
 
     public void setPresent(boolean present) {
+//        Cannot change to absent, if he has a grade
+        if(grade != 0 && !present)
+            return;
         this.present = present;
     }
 
@@ -50,7 +53,8 @@ public class ClassAttendance {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(Integer grade) {
+        if(!present) return;
         this.grade = grade;
     }
 
@@ -59,7 +63,7 @@ public class ClassAttendance {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClassAttendance that = (ClassAttendance) o;
-        return present == that.present && grade == that.grade && Objects.equals(id, that.id) && Objects.equals(student, that.student) && Objects.equals(classSession, that.classSession);
+        return present == that.present && Objects.equals(grade, that.grade) && Objects.equals(id, that.id) && Objects.equals(student, that.student) && Objects.equals(classSession, that.classSession);
     }
 
     @Override
