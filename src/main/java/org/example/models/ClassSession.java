@@ -17,4 +17,40 @@ public class ClassSession {
         this.group = group;
         this.sessionDate = sessionDate;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public LocalDate getSessionDate() {
+        return sessionDate;
+    }
+
+    public void setSessionDate(LocalDate sessionDate) {
+        this.sessionDate = sessionDate;
+    }
 }

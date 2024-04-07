@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class StudentTests {
     @Test
     public void givenStudent_whenConstructing_thenCheckEveryField() {
-        Student student = new Student("John", "Doe", "1990-01-01", "john.doe@example.com", "1234567890", null);
+        Student student = new Student("John", "Doe", "2000-01-01", "john@example.com", "123456789", null, null);
         assertEquals("John", student.getFirstName());
         assertEquals("Doe", student.getLastName());
         assertEquals(LocalDate.parse("1990-01-01"), student.getDateOfBirth());
@@ -20,14 +20,14 @@ public class StudentTests {
 
     @Test
     public void givenStudent_whenCopyConstructing_thenCheckEqual() {
-        Student student1 = new Student("John", "Doe", "1990-01-01", "john.doe@example.com", "1234567890", null);
+        Student student1 = new Student("John", "Doe", "2000-01-01", "john@example.com", "123456789", null, null);
         Student student2 = new Student(student1);
         assertEquals(student1, student2);
     }
 
     @Test
     public void givenStudent_whenCopyConstructing_thenCheckNotEqualIfDataChanged() {
-        Student student1 = new Student("John", "Doe", "1990-01-01", "john.doe@example.com", "1234567890", null);
+        Student student1 = new Student("John", "Doe", "2000-01-01", "john@example.com", "123456789", null, null);
         Student student2 = new Student(student1);
         student2.setEmail("test");
         Assertions.assertNotEquals(student1, student2);
