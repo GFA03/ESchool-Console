@@ -1,5 +1,8 @@
 package org.example.repositories;
 
+import org.example.exceptions.InvalidEmail;
+import org.example.models.Group;
+import org.example.models.Parent;
 import org.example.models.Student;
 
 import java.util.ArrayList;
@@ -14,6 +17,14 @@ public class StudentRepository implements GenericRepository<Student>{
 
     public void add (Student student) {
         students.add(student);
+    }
+
+    public void createStudent(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
+        students.add(new Student(firstName, lastName, dateOfBirth, email, phoneNumber, null, null));
+    }
+
+    public void createStudent(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
+        students.add(new Student(firstName, lastName, dateOfBirth, email, phoneNumber, parent, group));
     }
 
     public List<Student> getAll() {
@@ -37,6 +48,34 @@ public class StudentRepository implements GenericRepository<Student>{
         }
     }
 
+    public void updateStudentFirstName(Student student, String firstName) {
+        student.setFirstName(firstName);
+    }
+
+    public void updateStudentLastName(Student student, String lastName) {
+        student.setLastName(lastName);
+    }
+
+    public void updateStudentDateOfBirth(Student student, String dateOfBirth) {
+        student.setDateOfBirth(dateOfBirth);
+    }
+
+    public void updateStudentEmail(Student student, String email) throws InvalidEmail {
+        student.setEmail(email);
+    }
+
+    public void updateStudentPhoneNumber(Student student, String phoneNumber) {
+        student.setPhoneNumber(phoneNumber);
+    }
+
+    public void updateStudentParent(Student student, Parent parent) {
+        student.setParent(parent);
+    }
+
+    public void updateStudentGroup(Student student, Group group) {
+        student.setGroup(group);
+    }
+
     public void delete(Long studentId) {
         students.removeIf(student -> student.getId().equals(studentId));
     }
@@ -44,4 +83,5 @@ public class StudentRepository implements GenericRepository<Student>{
     public int getSize() {
         return students.size();
     }
+
 }
