@@ -1,6 +1,8 @@
 package org.example.services;
 
 import org.example.models.GroupCourse;
+import org.example.models.Student;
+import org.example.models.Teacher;
 import org.example.repositories.GroupCourseRepository;
 
 import java.util.List;
@@ -26,6 +28,10 @@ public class GroupCourseService {
 
     public List<GroupCourse> getAllGroupCourses() {
         return groupCourseRepository.getAll();
+    }
+
+    public List<Teacher> getStudentTeachers(Student student) {
+        return groupCourseRepository.getTeachersByStudent(student);
     }
 
     public void updateGroupCourse(GroupCourse updatedGroupCourse) {

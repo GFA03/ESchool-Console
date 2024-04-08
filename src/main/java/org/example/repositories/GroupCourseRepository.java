@@ -1,6 +1,8 @@
 package org.example.repositories;
 
 import org.example.models.GroupCourse;
+import org.example.models.Student;
+import org.example.models.Teacher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,15 @@ public class GroupCourseRepository implements GenericRepository<GroupCourse> {
                 return groupCourse;
         }
         return null;
+    }
+
+    public List<Teacher> getTeachersByStudent(Student student) {
+        List<Teacher> teachers = new ArrayList<>();
+        for (GroupCourse groupCourse: groupCourses) {
+            if (groupCourse.getGroup() == student.getGroup())
+                teachers.add(groupCourse.getTeacher());
+        }
+        return teachers;
     }
 
     public GroupCourse getByCourseId(Long courseId) {
