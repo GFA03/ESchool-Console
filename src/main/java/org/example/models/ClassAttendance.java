@@ -49,7 +49,7 @@ public class ClassAttendance {
         this.present = present;
     }
 
-    public int getGrade() {
+    public Integer getGrade() {
         return grade;
     }
 
