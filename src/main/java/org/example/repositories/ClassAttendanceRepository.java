@@ -37,6 +37,15 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
         return null;
     }
 
+    public List<ClassAttendance> getByStudent(Student student) {
+        List<ClassAttendance> studentClasses = new ArrayList<>();
+        for(ClassAttendance classAtt: classAttendances) {
+            if(classAtt.getStudent().equals(student))
+                studentClasses.add(classAtt);
+        }
+        return studentClasses;
+    }
+
     public void update(ClassAttendance updatedClassAttendance) {
         for (int i = 0; i < classAttendances.size(); i++) {
             ClassAttendance classAttendance = classAttendances.get(i);
@@ -60,4 +69,5 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
     public int getSize() {
         return classAttendances.size();
     }
+
 }
