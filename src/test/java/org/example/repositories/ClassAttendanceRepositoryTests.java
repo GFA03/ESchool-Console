@@ -20,7 +20,7 @@ public class ClassAttendanceRepositoryTests {
     void addAndGetAll() {
         Group group = new Group("232");
         Course course = new Course("Matematica XII");
-        ClassSession classSession = new ClassSession("Curs 1", course, group, LocalDate.parse("2024-04-03"));
+        ClassSession classSession = new ClassSession("Curs 1", course, group, "2024-04-03");
         Student student = new Student("John", "Doe", "2000-01-01", "john@example.com", "123456789", null, null);
         ClassAttendance classAttendance = new ClassAttendance(student, classSession, true, 90);
 
@@ -34,7 +34,7 @@ public class ClassAttendanceRepositoryTests {
     void getByStudentAndClassSession() {
         Group group = new Group("232");
         Course course = new Course("Matematica XII");
-        ClassSession classSession = new ClassSession("Curs 1", course, group, LocalDate.parse("2024-04-03"));
+        ClassSession classSession = new ClassSession("Curs 1", course, group, "2024-04-03");
         Student student = new Student("John", "Doe", "2000-01-01", "john@example.com", "123456789", null, null);
         ClassAttendance classAttendance = new ClassAttendance(student, classSession, true, 2);
 
@@ -47,7 +47,7 @@ public class ClassAttendanceRepositoryTests {
     void update() {
         Group group = new Group("232");
         Course course = new Course("Matematica XII");
-        ClassSession classSession = new ClassSession("Curs 1", course, group, LocalDate.parse("2024-04-03"));
+        ClassSession classSession = new ClassSession("Curs 1", course, group, "2024-04-03");
         Student student = new Student("John", "Doe", "2000-01-01", "john@example.com", "123456789", null, null);
         ClassAttendance classAttendance = new ClassAttendance(student, classSession, true, 90);
 
@@ -63,7 +63,7 @@ public class ClassAttendanceRepositoryTests {
     void delete() {
         Group group = new Group("232");
         Course course = new Course("Matematica XII");
-        ClassSession classSession = new ClassSession("Curs 1", course, group, LocalDate.parse("2024-04-03"));
+        ClassSession classSession = new ClassSession("Curs 1", course, group, "2024-04-03");
         Student student = new Student("John", "Doe", "2000-01-01", "john@example.com", "123456789", null, null);
         ClassAttendance classAttendance = new ClassAttendance(student, classSession, true, 90);
 

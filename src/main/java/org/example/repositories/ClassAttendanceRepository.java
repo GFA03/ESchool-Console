@@ -18,6 +18,19 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
         classAttendances.add(classAttendance);
     }
 
+    public void create(Student student, ClassSession classSession) {
+        classAttendances.add(new ClassAttendance(student, classSession));
+    }
+
+    public void create(Student student, ClassSession classSession, boolean present, Integer grade) {
+        classAttendances.add(new ClassAttendance(student, classSession, present, grade));
+    }
+
+    public void createForGroup(List<Student> studentByGroup, ClassSession classSession) {
+        for(Student student: studentByGroup)
+            create(student, classSession);
+    }
+
     public List<ClassAttendance> getAll() {
         return new ArrayList<>(classAttendances);
     }
@@ -55,6 +68,21 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
                 return;
             }
         }
+    }
+
+    public void update(ClassAttendance classAttendance, boolean present, Integer grade) {
+        updatePresence(classAttendance, present);
+        updateGrade(classAttendance, grade);
+    }
+
+    public void updatePresence(ClassAttendance classAttendance, boolean present) {
+        classAttendance.setPresent(present);
+        update(classAttendance);
+    }
+
+    public void updateGrade(ClassAttendance classAttendance, Integer grade) {
+        classAttendance.setGrade(grade);
+        update(classAttendance);
     }
 
     public void delete(Long id) {

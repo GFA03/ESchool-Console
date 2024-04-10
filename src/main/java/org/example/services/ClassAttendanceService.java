@@ -20,6 +20,10 @@ public class ClassAttendanceService {
         classAttendanceRepository.add(classAttendance);
     }
 
+    public void createForGroup(List<Student> studentsByGroup, ClassSession classSession) {
+        classAttendanceRepository.createForGroup(studentsByGroup, classSession);
+    }
+
     public ClassAttendance getClassAttendance(Long id) {
         return classAttendanceRepository.get(id);
     }
@@ -50,10 +54,18 @@ public class ClassAttendanceService {
         classAttendanceRepository.update(updatedClassAttendance);
     }
 
+    public void updateClassAttendance(ClassAttendance classAttendance, boolean present, Integer grade) {
+        classAttendanceRepository.update(classAttendance, present, grade);
+    }
+
     public void deleteClassAttendance(Student student, ClassSession classSession) {
         classAttendanceRepository.delete(student, classSession);
     }
     public void deleteClassAttendance(Long id) {
         classAttendanceRepository.delete(id);
+    }
+
+    public int getSize() {
+        return classAttendanceRepository.getSize();
     }
 }
