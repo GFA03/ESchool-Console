@@ -52,7 +52,7 @@ public class ClassAttendance {
 
     public void setPresent(boolean present) {
 //        Cannot change to absent, if he has a grade
-        if(grade != 0 && !present)
+        if(!Objects.equals(grade, null) && !present)
             return;
         this.present = present;
     }
