@@ -16,6 +16,10 @@ public class GroupRepository implements GenericRepository<Group> {
         groups.add(group);
     }
 
+    public void create(String name) {
+        groups.add(new Group(name));
+    }
+
     public List<Group> getAll() {
         return groups;
     }
@@ -37,6 +41,12 @@ public class GroupRepository implements GenericRepository<Group> {
         }
     }
 
+
+    public void updateName(Group group, String name) {
+        group.setName(name);
+        update(group);
+    }
+
     public void delete(Long groupId) {
         groups.removeIf(group -> group.getId().equals(groupId));
     }
@@ -44,4 +54,5 @@ public class GroupRepository implements GenericRepository<Group> {
     public int getSize() {
         return groups.size();
     }
+
 }
