@@ -1,6 +1,7 @@
 package org.example.models;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class ClassSession {
     private final Long id;
@@ -10,12 +11,12 @@ public class ClassSession {
     private Group group;
     private LocalDate sessionDate;
 
-    public ClassSession(String name, Course course, Group group, LocalDate sessionDate) {
+    public ClassSession(String name, Course course, Group group, String sessionDate) {
         this.id = ID_SEQ++;
         this.name = name;
         this.course = course;
         this.group = group;
-        this.sessionDate = sessionDate;
+        this.sessionDate = LocalDate.parse(sessionDate);
     }
 
     public Long getId() {
@@ -50,7 +51,31 @@ public class ClassSession {
         return sessionDate;
     }
 
-    public void setSessionDate(LocalDate sessionDate) {
-        this.sessionDate = sessionDate;
+    public void setSessionDate(String sessionDate) {
+        this.sessionDate = LocalDate.parse(sessionDate);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClassSession that = (ClassSession) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(course, that.course) && Objects.equals(group, that.group) && Objects.equals(sessionDate, that.sessionDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, course, group, sessionDate);
+    }
+
+    @Override
+    public String toString() {
+        return "ClassSession{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", course=" + course +
+                ", group=" + group +
+                ", sessionDate=" + sessionDate +
+                '}';
     }
 }
