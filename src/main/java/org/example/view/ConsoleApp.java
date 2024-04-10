@@ -24,8 +24,8 @@ import org.example.services.GroupService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -99,7 +99,7 @@ public class ConsoleApp {
                 manageClassSessions();
                 break;
             case 5:
-                // Implement manageClassAttendance method
+                manageClassAttendances();
                 break;
             case 6:
                 manageCourses();
@@ -201,7 +201,7 @@ public class ConsoleApp {
         String email = readEmail();
         String phoneNumber = readPhone();
         Parent parent = readParent();
-        Group group = readGroup();
+        Group group = getGroup();
         studentService.createStudent(firstName, lastName, dateOfBirth, email, phoneNumber, parent, group);
     }
 
@@ -272,7 +272,7 @@ public class ConsoleApp {
         }
     }
 
-    private Group readGroup() throws InvalidId {
+    private Group getGroup() throws InvalidId {
         while (true) {
             System.out.println("Enter group id(Or 0 for NULL):");
             Long groupId = readLong();
@@ -284,7 +284,7 @@ public class ConsoleApp {
         }
     }
 
-    private Group readGroupNotNull() throws InvalidId, InvalidRequest {
+    private Group getGroupNotNull() throws InvalidId, InvalidRequest {
         if (groupService.getSize() == 0)
             throw new InvalidRequest("Invalid request! There are no groups!");
         while (true) {
@@ -301,7 +301,7 @@ public class ConsoleApp {
             System.out.println("No students yet!");
             return;
         }
-        Student student = readStudentById();
+        Student student = getStudent();
         while (true) {
             assert student != null;
             showStudentByIdMenu(student);
@@ -332,9 +332,9 @@ public class ConsoleApp {
         System.out.println("9. Exit");
     }
 
-    private Student readStudentById() throws InvalidId {
+    private Student getStudent() throws InvalidId {
         while (true) {
-            System.out.println("Enter student id(Or 0 for NULL):");
+            System.out.println("Enter student id:");
             Long studentId = readLong();
             if(studentService.getStudentById(studentId) != null)
                 return studentService.getStudentById(studentId);
@@ -403,7 +403,7 @@ public class ConsoleApp {
         System.out.println("9. Exit");
     }
 
-    private int executeStudentUpdateOption(int option, Student student) throws InvalidId, InvalidEmail {
+    private int executeStudentUpdateOption(int option, Student student) throws InvalidId {
         switch (option) {
             case 1:
                 System.out.println("Enter new first name:");
@@ -869,8 +869,10 @@ public class ConsoleApp {
                 showClassSessionById();
                 break;
             case 3:
-                createClassSession();
+                ClassSession classSession = createClassSession();
                 System.out.println("Class session created successfully!");
+                createClassAttendance(classSession);
+                System.out.println("Class attendance for class session initialised successfully!");
                 break;
             case 4:
                 deleteClassSessionById();
@@ -898,16 +900,23 @@ public class ConsoleApp {
             System.out.println("Class session doesn't exist!");
     }
 
-    private void createClassSession() throws InvalidId, InvalidRequest {
-        System.out.println("Enter class session details:");
+    private ClassSession createClassSession() throws InvalidId, InvalidRequest {
         String name = readName("Enter class session name:");
-        Course course = readCourseNotNull();
-        Group group = readGroupNotNull();
+        Course course = getCourseNotNull();
+        Group group = getGroupNotNull();
         String sessionDate = readDate("Enter session date (YYYY-MM-DD): ");
-        classSessionService.createClassSession(name, course, group, sessionDate);
+        ClassSession classSession = new ClassSession(name, course, group, sessionDate);
+        classSessionService.addClassSession(classSession);
+        return classSession;
     }
 
-    private Course readCourse() throws InvalidId {
+
+    private void createClassAttendance(ClassSession classSession) {
+        List<Student> studentsByGroup = studentService.getAfterGroup(classSession.getGroup());
+        classAttendanceService.createForGroup(studentsByGroup, classSession);
+    }
+
+    private Course getCourse() throws InvalidId {
         while (true) {
             System.out.println("Enter course id(Or 0 for NULL):");
             Long courseId = readLong();
@@ -919,7 +928,7 @@ public class ConsoleApp {
         }
     }
 
-    private Course readCourseNotNull() throws InvalidId, InvalidRequest {
+    private Course getCourseNotNull() throws InvalidId, InvalidRequest {
         if (courseService.getSize() == 0)
             throw new InvalidRequest("Invalid request! There are no courses!");
         while (true) {
@@ -940,6 +949,128 @@ public class ConsoleApp {
             System.out.println("Class session deleted successfully!");
         } else {
             System.out.println("Class session ID incorrect!");
+        }
+    }
+
+    private void manageClassAttendances() {
+        while (true) {
+            showClassAttendancesMenu();
+            try {
+                int option = readOption();
+                int status = executeClassAttendancesOptions(option);
+                if (status == -1)
+                    break;
+            } catch (InvalidOption | InvalidId e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+
+    private void showClassAttendancesMenu() {
+        System.out.println("Class attendances menu:");
+        System.out.println("1. Show all class attendances");
+        System.out.println("2. Show class attendance by ID");
+        System.out.println("3. Update class attendance");
+        System.out.println("4. Delete class attendance by ID");
+        System.out.println("9. Exit");
+    }
+
+    private int executeClassAttendancesOptions(int option) throws InvalidId {
+        switch (option) {
+            case 1:
+                showAllClassAttendances();
+                break;
+            case 2:
+                showClassAttendanceById();
+                break;
+            case 3:
+                updateClassAttendance();
+                break;
+            case 4:
+                deleteClassAttendanceById();
+                break;
+            case 9:
+                System.out.println("Exiting...");
+                return -1;
+            default:
+                System.out.println("Invalid choice. Please enter a valid option.");
+        }
+        return 0;
+    }
+
+    private void showAllClassAttendances() {
+        System.out.println(classAttendanceService.getAllClassAttendances());
+    }
+
+    private void showClassAttendanceById() throws InvalidId {
+        System.out.println("Enter class attendance ID: ");
+        Long classAttendanceId = readLong();
+        ClassAttendance classAttendance = classAttendanceService.getClassAttendance(classAttendanceId);
+        if (classAttendance != null)
+            System.out.println(classAttendance);
+        else
+            System.out.println("Class attendance doesn't exist!");
+    }
+
+    private ClassSession getClassSession() throws InvalidId {
+        while (true) {
+            System.out.println("Enter class session id:");
+            Long classSessionId = readLong();
+            if(classSessionService.getClassSessionById(classSessionId) != null)
+                return classSessionService.getClassSessionById(classSessionId);
+            System.out.println("Invalid class session id! Please try again!");
+        }
+    }
+
+    private void updateClassAttendance() throws InvalidId {
+        System.out.println("Enter class attendance ID to update: ");
+        Long classAttendanceId = readLong();
+        ClassAttendance classAttendance = classAttendanceService.getClassAttendance(classAttendanceId);
+        if (classAttendance != null) {
+            System.out.println("Enter updated class attendance details:");
+            boolean present = readBoolean("Is the student present? (true/false): ");
+            Integer grade = null;
+            if (present) {
+                grade = readGrade();
+            }
+            classAttendanceService.updateClassAttendance(classAttendance, present, grade);
+            System.out.println("Class attendance updated successfully!");
+        } else {
+            System.out.println("Class attendance ID incorrect!");
+        }
+    }
+
+    private boolean readBoolean(String inputText) {
+        while (true) {
+            System.out.println(inputText);
+            String input = scanner.nextLine();
+            if (Objects.equals(input.trim().toLowerCase(), "true") || Objects.equals(input.trim(), "1"))
+                return true;
+            if (Objects.equals(input.trim().toLowerCase(), "false") || Objects.equals(input.trim(), "0"))
+                return false;
+            System.out.println("Invalid input! Please write \"true\" or \"false\"!");
+        }
+    }
+
+    private Integer readGrade() {
+        while (true) {
+            System.out.println("Enter student grade: ");
+            String input = scanner.nextLine();
+            if(input.matches("[1-9]|10"))
+                return Integer.parseInt(input);
+            System.out.println("Invalid grade!");
+        }
+    }
+
+    private void deleteClassAttendanceById() throws InvalidId {
+        System.out.println("Enter class attendance ID:");
+        Long classAttendanceId = readLong();
+        ClassAttendance classAttendance = classAttendanceService.getClassAttendance(classAttendanceId);
+        if (classAttendance != null) {
+            classAttendanceService.deleteClassAttendance(classAttendanceId);
+            System.out.println("Class attendance deleted successfully!");
+        } else {
+            System.out.println("Class attendance ID incorrect!");
         }
     }
 
