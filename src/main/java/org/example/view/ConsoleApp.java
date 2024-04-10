@@ -50,6 +50,7 @@ public class ConsoleApp {
 
     public static void main(String[] args) {
         ConsoleApp app = new ConsoleApp();
+        app.populateTables();
          while(true) {
             app.showMenu();
             try {
@@ -377,7 +378,7 @@ public class ConsoleApp {
         System.out.println(groupCourseService.getStudentTeachers(student));
     }
 
-    private void updateStudent(Student student) throws InvalidOption, InvalidId, InvalidEmail {
+    private void updateStudent(Student student) throws InvalidOption, InvalidId {
         while(true) {
             showUpdateStudentMenu();
             int option = readOption();
@@ -1270,6 +1271,70 @@ public class ConsoleApp {
         } else {
             System.out.println("Group course ID incorrect!");
         }
+    }
+
+    private void populateTables() {
+        populateGroups();
+        populateCourses();
+        populateTeachers();
+        populateGroupCourses();
+        populateParentsAndStudents();
+    }
+
+
+    private void populateGroups() {
+        Group group = new Group("XII A");
+        Group group2 = new Group("XII B");
+        Group group3 = new Group("XII C");
+        Group group4 = new Group("XII D");
+        groupService.addGroup(group);
+        groupService.addGroup(group2);
+        groupService.addGroup(group3);
+        groupService.addGroup(group4);
+    }
+
+    private void populateCourses() {
+        Course course1 = new Course("Mathematics");
+        Course course2 = new Course("Physics");
+        Course course3 = new Course("Chemistry");
+        Course course4 = new Course("Biology");
+        courseService.addCourse(course1);
+        courseService.addCourse(course2);
+        courseService.addCourse(course3);
+        courseService.addCourse(course4);
+    }
+
+    private void populateTeachers() {
+        Teacher teacher1 = new Teacher("John", "Doe", "1990-05-15", "john.doe@example.com", "0712345678");
+        Teacher teacher2 = new Teacher("Jane", "Smith", "1985-10-20", "jane.smith@example.com", "0762325678");
+        teacherService.addTeacher(teacher1);
+        teacherService.addTeacher(teacher2);
+    }
+
+    private void populateGroupCourses() {
+        GroupCourse groupCourse1 = new GroupCourse(groupService.getGroupById(1L), courseService.getCourseById(1L), teacherService.getTeacherById(1L));
+        GroupCourse groupCourse2 = new GroupCourse(groupService.getGroupById(2L), courseService.getCourseById(2L), teacherService.getTeacherById(1L));
+        GroupCourse groupCourse3 = new GroupCourse(groupService.getGroupById(3L), courseService.getCourseById(3L), teacherService.getTeacherById(2L));
+        GroupCourse groupCourse4 = new GroupCourse(groupService.getGroupById(4L), courseService.getCourseById(4L), teacherService.getTeacherById(2L));
+        groupCourseService.addGroupCourse(groupCourse1);
+        groupCourseService.addGroupCourse(groupCourse2);
+        groupCourseService.addGroupCourse(groupCourse3);
+        groupCourseService.addGroupCourse(groupCourse4);
+    }
+
+    private void populateParentsAndStudents() {
+        Parent parent1 = new Parent("Parent1", "Lastname1", "1970-01-01", "parent1@example.com", "111111111");
+        Parent parent2 = new Parent("Parent2", "Lastname2", "1975-02-02", "parent2@example.com", "222222222");
+        Parent parent3 = new Parent("Parent3", "Lastname3", "1980-03-03", "parent3@example.com", "333333333");
+        parentService.addParent(parent1);
+        parentService.addParent(parent2);
+        parentService.addParent(parent3);
+        Student student1 = new Student("John", "Doe", "2005-04-04", "john.doe@student.com", "444444444", parent1, groupService.getGroupById(1L));
+        Student student2 = new Student("Jane", "Smith", "2006-05-05", "jane.smith@student.com", "555555555", parent2, groupService.getGroupById(1L));
+        Student student3 = new Student("Alice", "Johnson", "2007-06-06", "alice.johnson@student.com", "666666666", parent3, groupService.getGroupById(2L));
+        studentService.addStudent(student1);
+        studentService.addStudent(student2);
+        studentService.addStudent(student3);
     }
 
 }
