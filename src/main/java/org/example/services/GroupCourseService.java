@@ -1,8 +1,6 @@
 package org.example.services;
 
-import org.example.models.GroupCourse;
-import org.example.models.Student;
-import org.example.models.Teacher;
+import org.example.models.*;
 import org.example.repositories.GroupCourseRepository;
 
 import java.util.List;
@@ -18,12 +16,11 @@ public class GroupCourseService {
         groupCourseRepository.add(groupCourse);
     }
 
-    public GroupCourse getGroupCourseByGroupId(Long groupId) {
-        return groupCourseRepository.get(groupId);
+    public void createGroupCourse(Group group, Course course, Teacher teacher) {
+        groupCourseRepository.create(group, course, teacher);
     }
-
-    public GroupCourse getGroupCourseByCourseId(Long courseId) {
-        return groupCourseRepository.getByCourseId(courseId);
+    public GroupCourse getGroupCourse(Long groupCourseId) {
+        return groupCourseRepository.get(groupCourseId);
     }
 
     public List<GroupCourse> getAllGroupCourses() {
@@ -38,7 +35,15 @@ public class GroupCourseService {
         groupCourseRepository.update(updatedGroupCourse);
     }
 
+    public void updateTeacher(GroupCourse groupCourse, Teacher newTeacher) { groupCourseRepository.updateTeacher(groupCourse, newTeacher);}
+
     public void deleteGroupCourse(GroupCourse groupCourse) {
         groupCourseRepository.delete(groupCourse);
+    }
+
+    public void deleteGroupCourse(Long id) { groupCourseRepository.delete(id);}
+
+    public int getSize() {
+        return groupCourseRepository.getSize();
     }
 }

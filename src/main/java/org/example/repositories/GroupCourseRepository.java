@@ -1,8 +1,6 @@
 package org.example.repositories;
 
-import org.example.models.GroupCourse;
-import org.example.models.Student;
-import org.example.models.Teacher;
+import org.example.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +16,17 @@ public class GroupCourseRepository implements GenericRepository<GroupCourse> {
         groupCourses.add(groupCourse);
     }
 
+
+    public void create(Group group, Course course, Teacher teacher) {
+        groupCourses.add(new GroupCourse(group, course, teacher));
+    }
     public List<GroupCourse> getAll() {
         return new ArrayList<>(groupCourses);
     }
 
-    public GroupCourse get(Long groupId) {
+    public GroupCourse get(Long groupCourseId) {
         for (GroupCourse groupCourse : groupCourses) {
-            if (groupCourse.getId().equals(groupId))
+            if (groupCourse.getId().equals(groupCourseId))
                 return groupCourse;
         }
         return null;
@@ -39,14 +41,6 @@ public class GroupCourseRepository implements GenericRepository<GroupCourse> {
         return teachers;
     }
 
-    public GroupCourse getByCourseId(Long courseId) {
-        for (GroupCourse groupCourse : groupCourses) {
-            if (groupCourse.getId().equals(courseId))
-                return groupCourse;
-        }
-        return null;
-    }
-
     public void update(GroupCourse updatedGroupCourse) {
         for (int i = 0; i < groupCourses.size(); i++) {
             GroupCourse groupCourse = groupCourses.get(i);
@@ -55,6 +49,12 @@ public class GroupCourseRepository implements GenericRepository<GroupCourse> {
                 return;
             }
         }
+    }
+
+
+    public void updateTeacher(GroupCourse groupCourse, Teacher newTeacher) {
+        groupCourse.setTeacher(newTeacher);
+        update(groupCourse);
     }
 
     public void delete(Long id) {
@@ -68,4 +68,5 @@ public class GroupCourseRepository implements GenericRepository<GroupCourse> {
     public int getSize() {
         return groupCourses.size();
     }
+
 }
