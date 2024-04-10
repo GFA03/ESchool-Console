@@ -1,5 +1,7 @@
 package org.example.models;
 
+import java.util.Objects;
+
 public class GroupCourse {
     private final Long id;
     private static Long ID_SEQ = 1L;
@@ -7,7 +9,7 @@ public class GroupCourse {
     private Course course;
     private Teacher teacher;
 
-    public GroupCourse(Long id, Group group, Course course, Teacher teacher) {
+    public GroupCourse(Group group, Course course, Teacher teacher) {
         this.id = ID_SEQ++;
         this.group = group;
         this.course = course;
@@ -40,5 +42,28 @@ public class GroupCourse {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GroupCourse that = (GroupCourse) o;
+        return Objects.equals(id, that.id) && Objects.equals(group, that.group) && Objects.equals(course, that.course) && Objects.equals(teacher, that.teacher);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, group, course, teacher);
+    }
+
+    @Override
+    public String toString() {
+        return "GroupCourse{" +
+                "id=" + id +
+                ", group=" + group +
+                ", course=" + course +
+                ", teacher=" + teacher +
+                '}';
     }
 }
