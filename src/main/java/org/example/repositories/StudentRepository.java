@@ -1,31 +1,45 @@
 package org.example.repositories;
 
-import org.example.exceptions.InvalidEmail;
 import org.example.models.Group;
 import org.example.models.Parent;
 import org.example.models.Student;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentRepository implements GenericRepository<Student>{
     private final List<Student> students;
+    private final Map<Group, List<Student>> groupToStudents;
 
     public StudentRepository() {
         students = new ArrayList<>();
+        groupToStudents = new HashMap<>();
     }
 
     @Override
     public void add (Student student) {
+        assert (student.getGroup() != null);
         students.add(student);
+        addStudentToMapping(student);
+    }
+
+    private void addStudentToMapping(Student student) {
+        groupToStudents.computeIfAbsent(student.getGroup(), k -> new ArrayList<>());
+        groupToStudents.get(student.getGroup()).add(student);
     }
 
     public void create(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
-        students.add(new Student(firstName, lastName, dateOfBirth, email, phoneNumber, null, null));
+        Student student = new Student(firstName, lastName, dateOfBirth, email, phoneNumber, null, null);
+        students.add(student);
+        addStudentToMapping(student);
     }
 
     public void create(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
-        students.add(new Student(firstName, lastName, dateOfBirth, email, phoneNumber, parent, group));
+        Student student = new Student(firstName, lastName, dateOfBirth, email, phoneNumber, parent, group);
+        students.add(student);
+        addStudentToMapping(student);
     }
 
     @Override
@@ -53,13 +67,7 @@ public class StudentRepository implements GenericRepository<Student>{
     }
 
     public List<Student> getByGroup(Group group) {
-        List<Student> studentsByGroup = new ArrayList<>();
-        for (Student student: students) {
-            if (student.getGroup().equals(group)) {
-                studentsByGroup.add(student);
-            }
-        }
-        return studentsByGroup;
+        return groupToStudents.get(group);
     }
 
     @Override
