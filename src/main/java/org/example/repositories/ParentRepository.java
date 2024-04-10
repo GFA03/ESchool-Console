@@ -12,14 +12,22 @@ public class ParentRepository implements GenericRepository<Parent> {
         parents = new ArrayList<>();
     }
 
+    @Override
     public void add(Parent parent) {
         parents.add(parent);
     }
 
+
+    public void create(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
+        parents.add(new Parent(firstName, lastName, dateOfBirth, email, phoneNumber));
+    }
+
+    @Override
     public List<Parent> getAll() {
         return parents;
     }
 
+    @Override
     public Parent get(Long parentId) {
         for (Parent parent : parents) {
             if (parent.getId().equals(parentId))
@@ -28,6 +36,7 @@ public class ParentRepository implements GenericRepository<Parent> {
         return null;
     }
 
+    @Override
     public void update(Parent updatedParent) {
         for (int i = 0; i < parents.size(); i++) {
             if (parents.get(i).getId().equals(updatedParent.getId())) {
@@ -37,12 +46,40 @@ public class ParentRepository implements GenericRepository<Parent> {
         }
     }
 
+    public void updateFirstName(Parent parent, String firstName) {
+        parent.setFirstName(firstName);
+        update(parent);
+    }
+
+    public void updateLastName(Parent parent, String lastName) {
+        parent.setLastName(lastName);
+        update(parent);
+    }
+
+    public void updateDateOfBirth(Parent parent, String dateOfBirth) {
+        parent.setDateOfBirth(dateOfBirth);
+        update(parent);
+    }
+
+    public void updateEmail(Parent parent, String email) {
+        parent.setEmail(email);
+        update(parent);
+    }
+
+    public void updatePhoneNumber(Parent parent, String phoneNumber) {
+        parent.setPhoneNumber(phoneNumber);
+        update(parent);
+    }
+
+    @Override
     public void delete(Long parentId) {
         parents.removeIf(parent -> parent.getId().equals(parentId));
     }
 
+    @Override
     public int getSize() {
         return parents.size();
     }
+
 }
 
