@@ -3,10 +3,7 @@ package org.example.view;
 import org.example.exceptions.InvalidEmail;
 import org.example.exceptions.InvalidId;
 import org.example.exceptions.InvalidOption;
-import org.example.models.Group;
-import org.example.models.Parent;
-import org.example.models.Person;
-import org.example.models.Student;
+import org.example.models.*;
 import org.example.repositories.StudentRepository;
 import org.example.services.StudentService;
 import org.example.repositories.ParentRepository;
@@ -67,8 +64,8 @@ public class ConsoleApp {
         System.out.println("1. Manage Students");
         System.out.println("2. Manage Parents");
         System.out.println("3. Manage Teachers");
-        System.out.println("4. Manage Class Attendance");
-        System.out.println("5. Manage Class Sessions");
+        System.out.println("4. Manage Class Sessions");
+        System.out.println("5. Manage Class Attendance");
         System.out.println("6. Manage Courses");
         System.out.println("7. Manage Group Courses");
         System.out.println("8. Manage Groups");
@@ -93,16 +90,16 @@ public class ConsoleApp {
                 manageParents();
                 break;
             case 3:
-                // Implement manageTeachers method
+                manageTeachers();
                 break;
             case 4:
-                // Implement manageClassAttendance method
-                break;
-            case 5:
                 // Implement manageClassSessions method
                 break;
+            case 5:
+                // Implement manageClassAttendance method
+                break;
             case 6:
-                // Implement manageCourses method
+//                manageCourses();
                 break;
             case 7:
                 // Implement manageGroupCourses method
@@ -464,7 +461,7 @@ public class ConsoleApp {
     private int executeParentsOptions(int option) throws InvalidId {
         switch (option) {
             case 1:
-                System.out.println(parentService.getAllParents());
+                showAllParents();
                 break;
             case 2:
                 showParent();
@@ -486,6 +483,10 @@ public class ConsoleApp {
                 System.out.println("Invalid choice. Please enter a valid option.");
         }
         return 0;
+    }
+
+    private void showAllParents() {
+        System.out.println(parentService.getAllParents());
     }
 
     private void showParent() throws InvalidId {
@@ -652,8 +653,97 @@ public class ConsoleApp {
             default:
                 System.out.println("Invalid choice. Please enter a valid option.");
         }
+
         return 0;
     }
+
+    private void manageTeachers() {
+        while (true) {
+            showTeachersMenu();
+            try {
+                int option = readOption();
+                int status = executeTeachersOptions(option);
+                if (status == -1)
+                    break;
+            } catch (InvalidOption invalidOption) {
+                System.out.println("Invalid option!");
+            } catch (InvalidId invalidId) {
+                System.out.println("Invalid id!");
+            }
+        }
+    }
+
+    private void showTeachersMenu() {
+        System.out.println("Teachers menu:");
+        System.out.println("1. Show all teachers");
+        System.out.println("2. Show teacher by ID");
+        System.out.println("3. Create teacher");
+        System.out.println("4. Delete teacher by ID");
+        System.out.println("9. Exit");
+    }
+
+    private int executeTeachersOptions(int option) throws InvalidId {
+        switch (option) {
+            case 1:
+                showAllTeachers();
+                break;
+            case 2:
+                showTeacherById();
+                break;
+            case 3:
+                createTeacher();
+                System.out.println("Teacher created successfully!");
+                break;
+            case 4:
+                deleteTeacherById();
+                break;
+            case 9:
+                System.out.println("Exiting...");
+                return -1;
+            default:
+                System.out.println("Invalid choice. Please enter a valid option.");
+        }
+        return 0;
+    }
+
+    private void showAllTeachers() {
+        System.out.println(teacherService.getAllTeachers());
+    }
+
+    private void showTeacherById() throws InvalidId {
+        System.out.println("Enter teacher ID: ");
+        Long teacherId = readLong();
+        Teacher teacher = teacherService.getTeacherById(teacherId);
+        if (teacher != null)
+            System.out.println(teacher);
+        else
+            System.out.println("Teacher doesn't exist!");
+    }
+
+    private void createTeacher() {
+        System.out.println("Enter teacher details:");
+        String firstName = readFirstName();
+        String lastName = readLastName();
+        String dateOfBirth = readDateOfBirth();
+        String email = readEmail();
+        String phoneNumber = readPhone();
+        teacherService.createTeacher(firstName, lastName, dateOfBirth, email, phoneNumber);
+    }
+
+    private void deleteTeacherById() throws InvalidId {
+        System.out.println("Enter teacher ID:");
+        Long teacherId = readLong();
+        Teacher teacher = teacherService.getTeacherById(teacherId);
+        if (teacher != null) {
+            teacherService.deleteTeacher(teacherId);
+            System.out.println("Teacher deleted successfully!");
+        } else {
+            System.out.println("Teacher ID incorrect!");
+        }
+    }
+
+
+
 
 }
 
