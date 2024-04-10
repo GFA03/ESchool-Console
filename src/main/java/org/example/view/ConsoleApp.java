@@ -3,6 +3,7 @@ package org.example.view;
 import org.example.exceptions.InvalidEmail;
 import org.example.exceptions.InvalidId;
 import org.example.exceptions.InvalidOption;
+import org.example.exceptions.InvalidRequest;
 import org.example.models.*;
 import org.example.repositories.StudentRepository;
 import org.example.services.StudentService;
@@ -21,6 +22,8 @@ import org.example.services.GroupCourseService;
 import org.example.repositories.GroupRepository;
 import org.example.services.GroupService;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -93,7 +96,7 @@ public class ConsoleApp {
                 manageTeachers();
                 break;
             case 4:
-                // Implement manageClassSessions method
+                manageClassSessions();
                 break;
             case 5:
                 // Implement manageClassAttendance method
@@ -192,9 +195,9 @@ public class ConsoleApp {
             System.out.println("Student doesn't exist!");
     }
     private void addStudent() throws InvalidId {
-        String firstName = readFirstName();
-        String lastName = readLastName();
-        String dateOfBirth = readDateOfBirth();
+        String firstName = readName("Enter first name:");
+        String lastName = readName("Enter last name:");
+        String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
         String email = readEmail();
         String phoneNumber = readPhone();
         Parent parent = readParent();
@@ -213,24 +216,23 @@ public class ConsoleApp {
         }
     }
 
-    private String readFirstName() {
-        System.out.println("Enter first name:");
+    private String readName(String inputText) {
+        System.out.println(inputText);
         return scanner.nextLine();
     }
 
-    private String readLastName() {
-        System.out.println("Enter last name:");
-        return scanner.nextLine();
-    }
-
-    private String readDateOfBirth() {
+    private String readDate(String inputText) {
         String dateOfBirth;
         while(true) {
-            System.out.println("Enter date of birth(Format like: 2000-12-30):");
+            System.out.println(inputText);
             dateOfBirth = scanner.nextLine();
-            if(Pattern.compile("\\d{4}-(0[1-9]|1[0-2])-\\d{2}").matcher(dateOfBirth).matches())
+            try {
+                LocalDate dob = LocalDate.parse(dateOfBirth);
                 return dateOfBirth;
-            System.out.println("Invalid date! Please try again!");
+            }
+            catch (DateTimeParseException e) {
+                System.out.println("Invalid date! Please try again!");
+            }
         }
     }
 
@@ -276,6 +278,18 @@ public class ConsoleApp {
             Long groupId = readLong();
             if(groupId == 0L)
                 return null;
+            if(groupService.getGroupById(groupId) != null)
+                return groupService.getGroupById(groupId);
+            System.out.println("Invalid group id! Please try again");
+        }
+    }
+
+    private Group readGroupNotNull() throws InvalidId, InvalidRequest {
+        if (groupService.getSize() == 0)
+            throw new InvalidRequest("Invalid request! There are no groups!");
+        while (true) {
+            System.out.println("Enter group id:");
+            Long groupId = readLong();
             if(groupService.getGroupById(groupId) != null)
                 return groupService.getGroupById(groupId);
             System.out.println("Invalid group id! Please try again");
@@ -402,7 +416,7 @@ public class ConsoleApp {
                 studentService.updateStudentLastName(student, lastName);
                 break;
             case 3:
-                String dateOfBirth = readDateOfBirth();
+                String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
                 studentService.updateStudentDateOfBirth(student, dateOfBirth);
                 break;
             case 4:
@@ -499,9 +513,9 @@ public class ConsoleApp {
     }
 
     private void addParent() {
-        String firstName = readFirstName();
-        String lastName = readLastName();
-        String dateOfBirth = readDateOfBirth();
+        String firstName = readName("Enter first name");
+        String lastName = readName("Enter last name");
+        String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
         String email = readEmail();
         String phoneNumber = readPhone();
         parentService.createParent(firstName, lastName, dateOfBirth, email, phoneNumber);
@@ -636,7 +650,7 @@ public class ConsoleApp {
                 parentService.updateParentLastName(parent, lastName);
                 break;
             case 3:
-                String dateOfBirth = readDateOfBirth();
+                String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
                 parentService.updateParentDateOfBirth(parent, dateOfBirth);
                 break;
             case 4:
@@ -722,9 +736,9 @@ public class ConsoleApp {
 
     private void createTeacher() {
         System.out.println("Enter teacher details:");
-        String firstName = readFirstName();
-        String lastName = readLastName();
-        String dateOfBirth = readDateOfBirth();
+        String firstName = readName("Enter first name");
+        String lastName = readName("Enter last name");
+        String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
         String email = readEmail();
         String phoneNumber = readPhone();
         teacherService.createTeacher(firstName, lastName, dateOfBirth, email, phoneNumber);
@@ -820,6 +834,112 @@ public class ConsoleApp {
             System.out.println("Course deleted successfully!");
         } else {
             System.out.println("Course ID incorrect!");
+        }
+    }
+
+    private void manageClassSessions() {
+        while (true) {
+            showClassSessionsMenu();
+            try {
+                int option = readOption();
+                int status = executeClassSessionsOptions(option);
+                if (status == -1)
+                    break;
+            } catch (InvalidOption | InvalidRequest | InvalidId e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+
+    private void showClassSessionsMenu() {
+        System.out.println("Class sessions menu:");
+        System.out.println("1. Show all class sessions");
+        System.out.println("2. Show class session by ID");
+        System.out.println("3. Create class session");
+        System.out.println("4. Delete class session by ID");
+        System.out.println("9. Exit");
+    }
+
+    private int executeClassSessionsOptions(int option) throws InvalidId, InvalidRequest {
+        switch (option) {
+            case 1:
+                showAllClassSessions();
+                break;
+            case 2:
+                showClassSessionById();
+                break;
+            case 3:
+                createClassSession();
+                System.out.println("Class session created successfully!");
+                break;
+            case 4:
+                deleteClassSessionById();
+                break;
+            case 9:
+                System.out.println("Exiting...");
+                return -1;
+            default:
+                System.out.println("Invalid choice. Please enter a valid option.");
+        }
+        return 0;
+    }
+
+    private void showAllClassSessions() {
+        System.out.println(classSessionService.getAllClassSessions());
+    }
+
+    private void showClassSessionById() throws InvalidId {
+        System.out.println("Enter class session ID: ");
+        Long classSessionId = readLong();
+        ClassSession classSession = classSessionService.getClassSessionById(classSessionId);
+        if (classSession != null)
+            System.out.println(classSession);
+        else
+            System.out.println("Class session doesn't exist!");
+    }
+
+    private void createClassSession() throws InvalidId, InvalidRequest {
+        System.out.println("Enter class session details:");
+        String name = readName("Enter class session name:");
+        Course course = readCourseNotNull();
+        Group group = readGroupNotNull();
+        String sessionDate = readDate("Enter session date (YYYY-MM-DD): ");
+        classSessionService.createClassSession(name, course, group, sessionDate);
+    }
+
+    private Course readCourse() throws InvalidId {
+        while (true) {
+            System.out.println("Enter course id(Or 0 for NULL):");
+            Long courseId = readLong();
+            if(courseId == 0L)
+                return null;
+            if(courseService.getCourseById(courseId) != null)
+                return courseService.getCourseById(courseId);
+            System.out.println("Invalid course id! Please try again");
+        }
+    }
+
+    private Course readCourseNotNull() throws InvalidId, InvalidRequest {
+        if (courseService.getSize() == 0)
+            throw new InvalidRequest("Invalid request! There are no courses!");
+        while (true) {
+            System.out.println("Enter course id:");
+            Long courseId = readLong();
+            if(courseService.getCourseById(courseId) != null)
+                return courseService.getCourseById(courseId);
+            System.out.println("Invalid course id! Please try again");
+        }
+    }
+
+    private void deleteClassSessionById() throws InvalidId {
+        System.out.println("Enter class session ID:");
+        Long classSessionId = readLong();
+        ClassSession classSession = classSessionService.getClassSessionById(classSessionId);
+        if (classSession != null) {
+            classSessionService.deleteClassSession(classSessionId);
+            System.out.println("Class session deleted successfully!");
+        } else {
+            System.out.println("Class session ID incorrect!");
         }
     }
 
