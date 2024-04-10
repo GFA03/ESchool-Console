@@ -10,6 +10,14 @@ public class ClassAttendance {
     boolean present;
     Integer grade;
 
+    public ClassAttendance(Student student, ClassSession classSession) {
+        this.id = ID_SEQ++;
+        this.student = student;
+        this.classSession = classSession;
+        this.present = true;
+        this.grade = null;
+    }
+
     public ClassAttendance(Student student, ClassSession classSession, boolean present, Integer grade) {
         this.id = ID_SEQ++;
         this.student = student;
@@ -69,5 +77,16 @@ public class ClassAttendance {
     @Override
     public int hashCode() {
         return Objects.hash(id, student, classSession, present, grade);
+    }
+
+    @Override
+    public String toString() {
+        return "ClassAttendance{" +
+                "id=" + id +
+                ", student=" + student +
+                ", classSession=" + classSession +
+                ", present=" + present +
+                ", grade=" + grade +
+                '}';
     }
 }
