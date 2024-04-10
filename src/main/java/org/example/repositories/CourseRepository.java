@@ -16,6 +16,11 @@ public class CourseRepository implements GenericRepository<Course> {
         courses.add(entity);
     }
 
+
+    public void create(String name) {
+        courses.add(new Course(name));
+    }
+
     @Override
     public Course get(Long id) {
         for(Course course: courses) {
@@ -40,6 +45,11 @@ public class CourseRepository implements GenericRepository<Course> {
         }
     }
 
+    public void updateName(Course course, String name) {
+        course.setCourseName(name);
+        update(course);
+    }
+
     @Override
     public void delete(Long id) {
         courses.removeIf(c -> c.getCourseId().equals(id));
@@ -49,4 +59,5 @@ public class CourseRepository implements GenericRepository<Course> {
     public int getSize() {
         return courses.size();
     }
+
 }
