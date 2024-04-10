@@ -105,7 +105,7 @@ public class ConsoleApp {
                 manageCourses();
                 break;
             case 7:
-                // Implement manageGroupCourses method
+                manageGroupCourses();
                 break;
             case 8:
                 manageGroups();
@@ -1168,6 +1168,107 @@ public class ConsoleApp {
             System.out.println("Group deleted successfully!");
         } else {
             System.out.println("Group ID incorrect!");
+        }
+    }
+
+    private void manageGroupCourses() {
+        while (true) {
+            showGroupCoursesMenu();
+            try {
+                int option = readOption();
+                int status = executeGroupCoursesOptions(option);
+                if (status == -1)
+                    break;
+            } catch (InvalidOption | InvalidId e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+
+    private void showGroupCoursesMenu() {
+        System.out.println("Group Courses menu:");
+        System.out.println("1. Show all group courses");
+        System.out.println("2. Show group course by ID");
+        System.out.println("3. Create group course");
+        System.out.println("4. Delete group course by ID");
+        System.out.println("9. Exit");
+    }
+
+    private int executeGroupCoursesOptions(int option) throws InvalidId {
+        switch (option) {
+            case 1:
+                showAllGroupCourses();
+                break;
+            case 2:
+                showGroupCourseById();
+                break;
+            case 3:
+                createGroupCourse();
+                System.out.println("Group course created successfully!");
+                break;
+            case 4:
+                deleteGroupCourseById();
+                break;
+            case 9:
+                System.out.println("Exiting...");
+                return -1;
+            default:
+                System.out.println("Invalid choice. Please enter a valid option.");
+        }
+        return 0;
+    }
+
+    private void showAllGroupCourses() {
+        System.out.println(groupCourseService.getAllGroupCourses());
+    }
+
+    private void showGroupCourseById() throws InvalidId {
+        System.out.println("Enter group course ID: ");
+        Long groupCourseId = readLong();
+        GroupCourse groupCourse = groupCourseService.getGroupCourse(groupCourseId);
+        if (groupCourse != null)
+            System.out.println(groupCourse);
+        else
+            System.out.println("Group course doesn't exist!");
+    }
+
+    private void createGroupCourse() throws InvalidId {
+        System.out.println("Enter group ID:");
+        Long groupId = readLong();
+        Group group = groupService.getGroupById(groupId);
+        if (group == null) {
+            System.out.println("Group ID incorrect!");
+            return;
+        }
+
+        System.out.println("Enter course ID:");
+        Long courseId = readLong();
+        Course course = courseService.getCourseById(courseId);
+        if (course == null) {
+            System.out.println("Course ID incorrect!");
+            return;
+        }
+
+        System.out.println("Enter teacher ID:");
+        Long teacherId = readLong();
+        Teacher teacher = teacherService.getTeacherById(teacherId);
+        if (teacher == null) {
+            System.out.println("Teacher ID incorrect!");
+            return;
+        }
+
+        groupCourseService.createGroupCourse(group, course, teacher);
+    }
+
+    private void deleteGroupCourseById() throws InvalidId {
+        System.out.println("Enter group course ID:");
+        Long groupCourseId = readLong();
+        GroupCourse groupCourse = groupCourseService.getGroupCourse(groupCourseId);
+        if (groupCourse != null) {
+            groupCourseService.deleteGroupCourse(groupCourseId);
+            System.out.println("Group course deleted successfully!");
+        } else {
+            System.out.println("Group course ID incorrect!");
         }
     }
 
