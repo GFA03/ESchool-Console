@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Objects;
 
-public class Person {
+public abstract class Person {
     private final Long id;
     private static Long ID_SEQ = 1L;
     private String firstName;
@@ -37,14 +37,6 @@ public class Person {
 
     public Long getId() {
         return id;
-    }
-
-    public static Long getIdSeq() {
-        return ID_SEQ;
-    }
-
-    public static void setIdSeq(Long idSeq) {
-        ID_SEQ = idSeq;
     }
 
     public String getFirstName() {
