@@ -19,7 +19,7 @@ public class TeacherRepository implements GenericRepository<Teacher> {
     }
 
     public void create(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
-        teachers.add(new Teacher(firstName, lastName, dateOfBirth, email, phoneNumber));
+        teachers.add(new Teacher(1L, firstName, lastName, dateOfBirth, email, phoneNumber));
     }
 
     @Override

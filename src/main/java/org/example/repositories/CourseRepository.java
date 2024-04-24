@@ -24,7 +24,7 @@ public class CourseRepository implements GenericRepository<Course> {
     @Override
     public Course get(Long id) {
         for(Course course: courses) {
-            if(course.getCourseId().equals(id))
+            if(course.getId().equals(id))
                 return course;
         }
         return null;
@@ -38,7 +38,7 @@ public class CourseRepository implements GenericRepository<Course> {
     @Override
     public void update(Course entity) {
         for(int i = 0; i < courses.size(); i++) {
-            if (courses.get(i).getCourseId().equals(entity.getCourseId())) {
+            if (courses.get(i).getId().equals(entity.getId())) {
                 courses.set(i, entity);
                 return;
             }
@@ -46,13 +46,13 @@ public class CourseRepository implements GenericRepository<Course> {
     }
 
     public void updateName(Course course, String name) {
-        course.setCourseName(name);
+        course.setName(name);
         update(course);
     }
 
     @Override
     public void delete(Long id) {
-        courses.removeIf(c -> c.getCourseId().equals(id));
+        courses.removeIf(c -> c.getId().equals(id));
     }
 
     @Override

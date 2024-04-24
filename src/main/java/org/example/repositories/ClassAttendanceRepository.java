@@ -19,11 +19,11 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
     }
 
     public void create(Student student, ClassSession classSession) {
-        classAttendances.add(new ClassAttendance(student, classSession));
+        classAttendances.add(new ClassAttendance(1L, student, classSession));
     }
 
     public void create(Student student, ClassSession classSession, boolean present, Integer grade) {
-        classAttendances.add(new ClassAttendance(student, classSession, present, grade));
+        classAttendances.add(new ClassAttendance(1L, student, classSession, present, grade));
     }
 
     public void createForGroup(List<Student> studentByGroup, ClassSession classSession) {

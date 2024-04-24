@@ -149,6 +149,9 @@ public class ConsoleApp {
 
 
     private void populateGroups() {
+        if (groupService.getSize() != 0) {
+            return;
+        }
         Group group = new Group("XII A");
         Group group2 = new Group("XII B");
         Group group3 = new Group("XII C");
@@ -160,6 +163,9 @@ public class ConsoleApp {
     }
 
     private void populateCourses() {
+        if (courseService.getSize() != 0) {
+            return;
+        }
         Course course1 = new Course("Mathematics");
         Course course2 = new Course("Physics");
         Course course3 = new Course("Chemistry");
@@ -171,13 +177,19 @@ public class ConsoleApp {
     }
 
     private void populateTeachers() {
-        Teacher teacher1 = new Teacher("John", "Doe", "1990-05-15", "john.doe@example.com", "0712345678");
-        Teacher teacher2 = new Teacher("Jane", "Smith", "1985-10-20", "jane.smith@example.com", "0762325678");
+        if (teacherService.getSize() != 0) {
+            return;
+        }
+        Teacher teacher1 = new Teacher(1L, "John", "Doe", "1990-05-15", "john.doe@example.com", "0712345678");
+        Teacher teacher2 = new Teacher(2L, "Jane", "Smith", "1985-10-20", "jane.smith@example.com", "0762325678");
         teacherService.addTeacher(teacher1);
         teacherService.addTeacher(teacher2);
     }
 
     private void populateGroupCourses() {
+        if (groupCourseService.getSize() != 0) {
+            return;
+        }
         GroupCourse groupCourse1 = new GroupCourse(groupService.getGroupById(1L), courseService.getCourseById(1L), teacherService.getTeacherById(1L));
         GroupCourse groupCourse2 = new GroupCourse(groupService.getGroupById(2L), courseService.getCourseById(2L), teacherService.getTeacherById(1L));
         GroupCourse groupCourse3 = new GroupCourse(groupService.getGroupById(3L), courseService.getCourseById(3L), teacherService.getTeacherById(2L));
@@ -189,15 +201,18 @@ public class ConsoleApp {
     }
 
     private void populateParentsAndStudents() {
-        Parent parent1 = new Parent("Parent1", "Lastname1", "1970-01-01", "parent1@example.com", "111111111");
-        Parent parent2 = new Parent("Parent2", "Lastname2", "1975-02-02", "parent2@example.com", "222222222");
-        Parent parent3 = new Parent("Parent3", "Lastname3", "1980-03-03", "parent3@example.com", "333333333");
+        if (parentService.getSize() != 0) {
+            return;
+        }
+        Parent parent1 = new Parent(1L, "Parent1", "Lastname1", "1970-01-01", "parent1@example.com", "111111111");
+        Parent parent2 = new Parent(2L, "Parent2", "Lastname2", "1975-02-02", "parent2@example.com", "222222222");
+        Parent parent3 = new Parent(3L, "Parent3", "Lastname3", "1980-03-03", "parent3@example.com", "333333333");
         parentService.addParent(parent1);
         parentService.addParent(parent2);
         parentService.addParent(parent3);
-        Student student1 = new Student("John", "Doe", "2005-04-04", "john.doe@student.com", "444444444", parent1, groupService.getGroupById(1L));
-        Student student2 = new Student("Jane", "Smith", "2006-05-05", "jane.smith@student.com", "555555555", parent2, groupService.getGroupById(1L));
-        Student student3 = new Student("Alice", "Johnson", "2007-06-06", "alice.johnson@student.com", "666666666", parent3, groupService.getGroupById(2L));
+        Student student1 = new Student(1L, "John", "Doe", "2005-04-04", "john.doe@student.com", "444444444", parent1, groupService.getGroupById(1L));
+        Student student2 = new Student(2L, "Jane", "Smith", "2006-05-05", "jane.smith@student.com", "555555555", parent2, groupService.getGroupById(1L));
+        Student student3 = new Student(3L, "Alice", "Johnson", "2007-06-06", "alice.johnson@student.com", "666666666", parent3, groupService.getGroupById(2L));
         studentService.add(student1);
         studentService.add(student2);
         studentService.add(student3);

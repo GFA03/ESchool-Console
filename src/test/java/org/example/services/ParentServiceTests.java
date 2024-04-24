@@ -5,7 +5,6 @@ import org.example.repositories.ParentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,8 +16,8 @@ public class ParentServiceTests {
 
     @BeforeEach
     void setUp() {
-        parentRepository = new ParentRepository();
-        parentService = new ParentService(parentRepository);
+//        parentRepository = new ParentRepository(connection);
+//        parentService = new ParentService(parentRepository);
     }
 
     @Test

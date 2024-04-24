@@ -61,7 +61,7 @@ public class GroupCourse {
     public String toString() {
         return "GroupCourse ID: " + id + "\n" +
                 "Group: " + group.getId() + "\n" +
-                "Course: " + course.getCourseId() + "\n" +
+                "Course: " + course.getId() + "\n" +
                 "Teacher: " + teacher.getId() + "\n\n";
     }
 }

@@ -31,13 +31,13 @@ public class StudentRepository implements GenericRepository<Student>{
     }
 
     public void create(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
-        Student student = new Student(firstName, lastName, dateOfBirth, email, phoneNumber, null, null);
+        Student student = new Student(1L, firstName, lastName, dateOfBirth, email, phoneNumber, null, null);
         students.add(student);
         addStudentToMapping(student);
     }
 
     public void create(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
-        Student student = new Student(firstName, lastName, dateOfBirth, email, phoneNumber, parent, group);
+        Student student = new Student(1L, firstName, lastName, dateOfBirth, email, phoneNumber, parent, group);
         students.add(student);
         addStudentToMapping(student);
     }

@@ -6,15 +6,14 @@ import java.util.Objects;
 
 public abstract class Person {
     private final Long id;
-    private static Long ID_SEQ = 1L;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
     private String email;
     private String phoneNumber;
 
-    public Person(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
-        this.id = ID_SEQ++;
+    public Person(Long id, String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = LocalDate.parse(dateOfBirth);
@@ -55,8 +54,8 @@ public abstract class Person {
         this.lastName = lastName;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public String getDateOfBirth() {
+        return dateOfBirth.toString();
     }
 
     public void setDateOfBirth(String dateOfBirth) {

@@ -72,7 +72,7 @@ public class ClassSession {
     public String toString() {
         return "Class Session ID: " + id + "\n" +
                 "Name: " + name + "\n" +
-                "Course ID: " + course.getCourseId() + "\n" +
+                "Course ID: " + course.getId() + "\n" +
                 "Group ID: " + group.getId() + "\n" +
                 "Session Date: " + sessionDate.toString() + "\n\n";
     }

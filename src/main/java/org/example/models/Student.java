@@ -5,8 +5,8 @@ import java.util.Objects;
 public class Student extends Person{
     private Parent parent;
     private Group group;
-    public Student(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
-        super(firstName, lastName, dateOfBirth, email, phoneNumber);
+    public Student(Long id, String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
+        super(id, firstName, lastName, dateOfBirth, email, phoneNumber);
         this.parent = parent;
         this.group = group;
     }

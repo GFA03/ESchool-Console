@@ -94,7 +94,8 @@ public class ParentView {
         String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
         String email = readEmail();
         String phoneNumber = readPhone();
-        parentService.createParent(firstName, lastName, dateOfBirth, email, phoneNumber);
+        Parent parent = new Parent(1L, firstName, lastName, dateOfBirth, email, phoneNumber);
+        parentService.addParent(parent);
     }
 
     private void deleteParent() throws InvalidId {
