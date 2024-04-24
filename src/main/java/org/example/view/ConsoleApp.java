@@ -28,6 +28,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+
+import static org.example.utils.ReaderUtils.readLong;
+
 //TODO: make that console app has only the manage tables, and for each table you will have a different view that works with it, each one will have its own service
 public class ConsoleApp {
     private final Scanner scanner = new Scanner(System.in);
@@ -310,7 +313,7 @@ public class ConsoleApp {
         }
     }
 
-    private void showPersonByIdMenu(Person person) {
+    public static void showPersonByIdMenu(Person person) {
         System.out.println(person.getFirstName() + " " + person.getLastName() + " menu:");
     }
 
@@ -379,7 +382,7 @@ public class ConsoleApp {
     }
 
 
-    private void showUpdatePersonMenu() {
+    public static void showUpdatePersonMenu() {
         System.out.println("1. Edit first name");
         System.out.println("2. Edit last name");
         System.out.println("3. Edit date of birth");
@@ -387,7 +390,7 @@ public class ConsoleApp {
         System.out.println("5. Edit phone number");
     }
 
-    private void showUpdateStudentMenu() {
+    public static void showUpdateStudentMenu() {
         showUpdatePersonMenu();
         System.out.println("6. Edit parent");
         System.out.println("7. Edit group");
@@ -436,231 +439,12 @@ public class ConsoleApp {
         }
         return 0;
     }
-
+//TODO: Make each view Singleton
     private void manageParents() {
-        while (true) {
-            showParentsMenu();
-            try {
-                int option = readOption();
-                int status = executeParentsOptions(option);
-                if (status == -1)
-                    break;
-            } catch (InvalidOption invalidOption) {
-                System.out.println("Invalid option!");
-            } catch (InvalidId e) {
-                System.out.println("Invalid id!");
-            }
-        }
+        ParentView view = new ParentView(parentService, studentService);
+        view.run();
     }
 
-    private void showParentsMenu() {
-        System.out.println("Parents menu:");
-        System.out.println("1. Show all parents");
-        System.out.println("2. Show parent by ID");
-        System.out.println("3. Enter parent ID");
-        System.out.println("4. Create parent");
-        System.out.println("5. Delete parent by ID");
-        System.out.println("9. Exit");
-    }
-
-    private int executeParentsOptions(int option) throws InvalidId {
-        switch (option) {
-            case 1:
-                showAllParents();
-                break;
-            case 2:
-                showParent();
-                break;
-            case 3:
-                manageParentById();
-                break;
-            case 4:
-                addParent();
-                System.out.println("Parent created successfully!");
-                break;
-            case 5:
-                deleteParent();
-                break;
-            case 9:
-                System.out.println("Exiting...");
-                return -1;
-            default:
-                System.out.println("Invalid choice. Please enter a valid option.");
-        }
-        return 0;
-    }
-
-    private void showAllParents() {
-        System.out.println(parentService.getAllParents());
-    }
-
-    private void showParent() throws InvalidId {
-        System.out.println("Enter parent id: ");
-        Long parentId = readLong();
-        if(parentService.getParentById(parentId) != null)
-            System.out.println(parentService.getParentById(parentId));
-        else
-            System.out.println("Parent doesn't exist!");
-    }
-
-    private void addParent() {
-        String firstName = readName("Enter first name");
-        String lastName = readName("Enter last name");
-        String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
-        String email = readEmail();
-        String phoneNumber = readPhone();
-        parentService.createParent(firstName, lastName, dateOfBirth, email, phoneNumber);
-    }
-
-    private void deleteParent() throws InvalidId {
-        System.out.println("Enter parent id:");
-        Long parentId = readLong();
-        if(parentService.getParentById(parentId) != null) {
-            parentService.deleteParent(parentId);
-            System.out.println("Parent deleted successfully!");
-        } else {
-            System.out.println("Parent id incorrect!");
-        }
-    }
-
-    private void manageParentById() throws InvalidId {
-        if(parentService.getSize() == 0) {
-            System.out.println("No parents yet!");
-            return;
-        }
-        Parent parent = readParent();
-        while (true) {
-            assert (parent != null);
-            showParentByIdMenu(parent);
-            try {
-                int option = readOption();
-                int status = executeParentByIdOptions(option, parent);
-                if (status == -1)
-                    break;
-            } catch (InvalidOption invalidOption) {
-                System.out.println("Invalid option!");
-            }
-        }
-    }
-
-    private void showParentByIdMenu(Parent parent) {
-        showPersonByIdMenu(parent);
-        System.out.println("1. Show child(ren)");
-        System.out.println("2. Update parent");
-        System.out.println("9. Exit");
-    }
-
-
-    private int executeParentByIdOptions(int option, Parent parent) throws InvalidOption, InvalidId {
-        switch (option) {
-            case 1:
-                parentChildrenOptions(parent);
-                break;
-            case 2:
-                updateParent(parent);
-                break;
-            case 9:
-                System.out.println("Exiting...");
-                return -1;
-            default:
-                System.out.println("Invalid choice. Please enter a valid option.");
-        }
-        return 0;
-    }
-
-    private void parentChildrenOptions(Parent parent) throws InvalidId {
-        List<Student> children = getChildren(parent);
-        if (children.isEmpty())
-            return;
-        int status = 0;
-        while(true) {
-            showChildren(children);
-            System.out.println("Please choose a student to show activity or 0 to leave");
-            Long studentId = readLong();
-            if (studentId == 0L)
-                break;
-            for (Student student: children) {
-                if (student.getId().equals(studentId)) {
-                    status = executeParentChildren(student);
-                }
-            }
-            if (status == -1)
-                break;
-        }
-    }
-
-    private int executeParentChildren(Student student) throws InvalidId {
-        while (true) {
-            assert student != null;
-            showStudentByIdMenu(student);
-            try {
-                int option = readOption();
-                int status = executeStudentByIdOptions(option, student);
-                if(status == -1)
-                    return -1;
-            } catch (InvalidOption invalidOption) {
-                System.out.println("Invalid option!");
-            }
-            catch (InvalidEmail invalidEmail) {
-                System.out.println("Invalid email!");
-            }
-        }
-    }
-    private List<Student> getChildren(Parent parent) {
-        return studentService.getAfterParent(parent);
-    }
-
-    private void showChildren(List<Student> children) {
-        System.out.println(children);
-    }
-
-    private void updateParent(Parent parent) throws InvalidOption {
-        while(true) {
-            showUpdateParentMenu();
-            int option = readOption();
-            int execute = executeParentUpdateOption(option, parent);
-            if(execute == -1)
-                break;
-        }
-    }
-
-    private void showUpdateParentMenu() {
-        showUpdatePersonMenu();
-    }
-
-    private int executeParentUpdateOption(int option, Parent parent) {
-        switch (option) {
-            case 1:
-                System.out.println("Enter new first name:");
-                String firstName = scanner.nextLine();
-                parentService.updateParentFirstName(parent, firstName);
-                break;
-            case 2:
-                System.out.println("Enter new last name:");
-                String lastName = scanner.nextLine();
-                parentService.updateParentLastName(parent, lastName);
-                break;
-            case 3:
-                String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
-                parentService.updateParentDateOfBirth(parent, dateOfBirth);
-                break;
-            case 4:
-                String email = readEmail();
-                parentService.updateParentEmail(parent, email);
-                break;
-            case 5:
-                String phoneNumber = readPhone();
-                parentService.updateParentPhoneNumber(parent, phoneNumber);
-                break;
-            case 9:
-                System.out.println("Exiting...");
-                return -1;
-            default:
-                System.out.println("Invalid choice. Please enter a valid option.");
-        }
-
-        return 0;
-    }
 
     private void manageTeachers() {
         while (true) {

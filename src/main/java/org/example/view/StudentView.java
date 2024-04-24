@@ -11,6 +11,8 @@ import org.example.models.Student;
 import org.example.services.*;
 
 import static org.example.utils.ReaderUtils.*;
+import static org.example.view.ConsoleApp.showUpdatePersonMenu;
+import static org.example.view.ConsoleApp.showUpdateStudentMenu;
 
 public class StudentView {
     private final StudentService studentService;
@@ -221,21 +223,6 @@ public class StudentView {
         }
     }
 
-
-    private void showUpdatePersonMenu() {
-        System.out.println("1. Edit first name");
-        System.out.println("2. Edit last name");
-        System.out.println("3. Edit date of birth");
-        System.out.println("4. Edit email");
-        System.out.println("5. Edit phone number");
-    }
-
-    private void showUpdateStudentMenu() {
-        showUpdatePersonMenu();
-        System.out.println("6. Edit parent");
-        System.out.println("7. Edit group");
-        System.out.println("9. Exit");
-    }
 
     private int executeStudentUpdateOption(int option, Student student) throws InvalidId {
         switch (option) {
