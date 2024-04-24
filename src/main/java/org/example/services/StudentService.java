@@ -15,16 +15,8 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public void addStudent(Student student) {
+    public void add(Student student) {
         studentRepository.add(student);
-    }
-
-    public void createStudent(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
-        studentRepository.create(firstName, lastName, dateOfBirth, email, phoneNumber);
-    }
-
-    public void createStudent(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
-        studentRepository.create(firstName, lastName, dateOfBirth, email, phoneNumber, parent, group);
     }
 
     public List<Student> getAllStudents() {

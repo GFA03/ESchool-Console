@@ -28,40 +28,42 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
+//TODO: make that console app has only the manage tables, and for each table you will have a different view that works with it, each one will have its own service
 public class ConsoleApp {
     private final Scanner scanner = new Scanner(System.in);
-    private final StudentRepository studentRepository = new StudentRepository();
-    private final StudentService studentService = new StudentService(studentRepository);
-    private final ParentRepository parentRepository = new ParentRepository();
-    private final ParentService parentService = new ParentService(parentRepository);
-    private final TeacherRepository teacherRepository = new TeacherRepository();
-    private final TeacherService teacherService = new TeacherService(teacherRepository);
-    private final ClassAttendanceRepository classAttendanceRepository = new ClassAttendanceRepository();
-    private final ClassAttendanceService classAttendanceService = new ClassAttendanceService(classAttendanceRepository);
-    private final ClassSessionRepository classSessionRepository = new ClassSessionRepository();
-    private final ClassSessionService classSessionService = new ClassSessionService(classSessionRepository);
-    private final CourseRepository courseRepository = new CourseRepository();
-    private final CourseService courseService = new CourseService(courseRepository);
-    private final GroupCourseRepository groupCourseRepository = new GroupCourseRepository();
-    private final GroupCourseService groupCourseService = new GroupCourseService(groupCourseRepository);
-    private final GroupRepository groupRepository = new GroupRepository();
-    private final GroupService groupService = new GroupService(groupRepository);
+    private final StudentService studentService;
+    private final ParentService parentService;
+    private final TeacherService teacherService;
+    private final ClassAttendanceService classAttendanceService;
+    private final ClassSessionService classSessionService;
+    private final CourseService courseService;
+    private final GroupCourseService groupCourseService;
+    private final GroupService groupService;
 
-    public static void main(String[] args) {
-        ConsoleApp app = new ConsoleApp();
-        app.populateTables();
-         while(true) {
-            app.showMenu();
+    public ConsoleApp(StudentService studentService, ParentService parentService, TeacherService teacherService, ClassAttendanceService classAttendanceService,
+                      ClassSessionService classSessionService, CourseService courseService, GroupCourseService groupCourseService, GroupService groupService) {
+        this.studentService = studentService;
+        this.parentService = parentService;
+        this.teacherService = teacherService;
+        this.classAttendanceService = classAttendanceService;
+        this.classSessionService = classSessionService;
+        this.courseService = courseService;
+        this.groupCourseService = groupCourseService;
+        this.groupService = groupService;
+    }
+
+    public void run() {
+        this.populateTables();
+        while(true) {
+            this.showMenu();
             try {
-                int option = app.readOption();
-                app.execute(option);
+                int option = this.readOption();
+                this.execute(option);
             } catch (InvalidOption invalidOption) {
                 System.out.println("Invalid option");
             }
         }
     }
-
 
     public void showMenu() {
         System.out.println("Main Menu:");
@@ -134,19 +136,8 @@ public class ConsoleApp {
     }
 
     private void manageStudents() {
-        while(true) {
-            showStudentsMenu();
-            try {
-                int option = readOption();
-                int status = executeStudentsOptions(option);
-                if(status == -1)
-                    break;
-            } catch (InvalidOption invalidOption) {
-                System.out.println("Invalid option!");
-            } catch (InvalidId e) {
-                System.out.println("Invalid id!");
-            }
-        }
+        StudentView view = new StudentView(studentService, groupService, parentService, groupCourseService, classAttendanceService);
+        view.run();
     }
 
 
@@ -203,7 +194,6 @@ public class ConsoleApp {
         String phoneNumber = readPhone();
         Parent parent = readParent();
         Group group = getGroup();
-        studentService.createStudent(firstName, lastName, dateOfBirth, email, phoneNumber, parent, group);
     }
 
     private void deleteStudent() throws InvalidId {
@@ -1332,9 +1322,9 @@ public class ConsoleApp {
         Student student1 = new Student("John", "Doe", "2005-04-04", "john.doe@student.com", "444444444", parent1, groupService.getGroupById(1L));
         Student student2 = new Student("Jane", "Smith", "2006-05-05", "jane.smith@student.com", "555555555", parent2, groupService.getGroupById(1L));
         Student student3 = new Student("Alice", "Johnson", "2007-06-06", "alice.johnson@student.com", "666666666", parent3, groupService.getGroupById(2L));
-        studentService.addStudent(student1);
-        studentService.addStudent(student2);
-        studentService.addStudent(student3);
+        studentService.add(student1);
+        studentService.add(student2);
+        studentService.add(student3);
     }
 
 }
