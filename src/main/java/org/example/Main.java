@@ -6,14 +6,14 @@ import org.example.view.ConsoleApp;
 
 public class Main {
     public static void main(String[] args) {
-        StudentRepository studentRepository = new StudentRepository();
-        StudentService studentService = new StudentService(studentRepository);
         ParentRepository parentRepository = new ParentRepository();
         ParentService parentService = new ParentService(parentRepository);
         TeacherRepository teacherRepository = new TeacherRepository();
         TeacherService teacherService = new TeacherService(teacherRepository);
         ClassAttendanceRepository classAttendanceRepository = new ClassAttendanceRepository();
         ClassAttendanceService classAttendanceService = new ClassAttendanceService(classAttendanceRepository);
+        StudentRepository studentRepository = new StudentRepository();
+        StudentService studentService = new StudentService(studentRepository, classAttendanceService);
         ClassSessionRepository classSessionRepository = new ClassSessionRepository();
         ClassSessionService classSessionService = new ClassSessionService(classSessionRepository);
         CourseRepository courseRepository = new CourseRepository();
