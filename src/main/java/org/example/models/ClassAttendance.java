@@ -81,12 +81,10 @@ public class ClassAttendance {
 
     @Override
     public String toString() {
-        return "ClassAttendance{" +
-                "id=" + id +
-                ", student=" + student +
-                ", classSession=" + classSession +
-                ", present=" + present +
-                ", grade=" + grade +
-                '}';
+        return "Class Attendance ID: " + id + "\n" +
+                "Student ID: " + student.getId() + "\n" +
+                "ClassSession ID: " + classSession.getId() + "\n" +
+                "Present attendance: " + present + "\n" +
+                "Grade attendance: " + (grade != null ? grade : "None") + "\n\n";
     }
 }
