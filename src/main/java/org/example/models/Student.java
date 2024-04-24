@@ -50,9 +50,10 @@ public class Student extends Person{
 
     @Override
     public String toString() {
-        return super.toString() + "Student{" +
-                "parent=" + parent +
-                ", group=" + group +
-                '}';
+        return "Student ID: " + super.getId() + "\n" +
+                super.toString() +
+                "Parent: " + (parent != null ? parent.getFirstName() + " " + parent.getLastName() : "None") + "\n" +
+                "Group: " + (group != null ? group.getName() : "None") + "\n\n";
     }
+
 }

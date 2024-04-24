@@ -94,13 +94,9 @@ public abstract class Person {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+        return "Name: " + firstName + " " + lastName + "\n" +
+                "Date of Birth: " + dateOfBirth + "\n" +
+                "Email: " + email + "\n" +
+                "Phone Number: " + phoneNumber + "\n";
     }
 }

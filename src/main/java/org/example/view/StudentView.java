@@ -38,7 +38,7 @@ public class StudentView {
                 if(status == -1)
                     break;
             } catch (InvalidOption | InvalidId | InvalidRequest e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -215,6 +215,7 @@ public class StudentView {
 
     private void updateStudent(Student student) throws InvalidOption, InvalidId {
         while(true) {
+            showUpdatePersonMenu();
             showUpdateStudentMenu();
             int option = readOption();
             int execute = executeStudentUpdateOption(option, student);

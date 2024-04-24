@@ -5,4 +5,9 @@ public class Parent extends Person{
         super(firstName, lastName, dateOfBirth, email, phoneNumber);
     }
 
+    @Override
+    public String toString() {
+        return "Parent ID: " + super.getId() + "\n" +
+                super.toString() + "\n";
+    }
 }

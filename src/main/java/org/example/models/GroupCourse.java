@@ -59,11 +59,9 @@ public class GroupCourse {
 
     @Override
     public String toString() {
-        return "GroupCourse{" +
-                "id=" + id +
-                ", group=" + group +
-                ", course=" + course +
-                ", teacher=" + teacher +
-                '}';
+        return "GroupCourse ID: " + id + "\n" +
+                "Group: " + group.getId() + "\n" +
+                "Course: " + course.getCourseId() + "\n" +
+                "Teacher: " + teacher.getId() + "\n\n";
     }
 }

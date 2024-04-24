@@ -70,12 +70,10 @@ public class ClassSession {
 
     @Override
     public String toString() {
-        return "ClassSession{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", course=" + course +
-                ", group=" + group +
-                ", sessionDate=" + sessionDate +
-                '}';
+        return "Class Session ID: " + id + "\n" +
+                "Name: " + name + "\n" +
+                "Course ID: " + course.getCourseId() + "\n" +
+                "Group ID: " + group.getId() + "\n" +
+                "Session Date: " + sessionDate.toString() + "\n\n";
     }
 }
