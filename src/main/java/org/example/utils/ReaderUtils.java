@@ -8,6 +8,7 @@ import org.example.models.Parent;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -80,6 +81,30 @@ public class ReaderUtils {
             System.out.println("Invalid phone number! Please try again!");
         }
     }
+
+    public static boolean readBoolean(String inputText) {
+        while (true) {
+            System.out.println(inputText);
+            String input = scanner.nextLine();
+            if (Objects.equals(input.trim().toLowerCase(), "true") || Objects.equals(input.trim(), "1"))
+                return true;
+            if (Objects.equals(input.trim().toLowerCase(), "false") || Objects.equals(input.trim(), "0"))
+                return false;
+            System.out.println("Invalid input! Please write \"true\" or \"false\"!");
+        }
+    }
+
+
+    public static Integer readGrade() {
+        while (true) {
+            System.out.println("Enter student grade: ");
+            String input = scanner.nextLine();
+            if(input.matches("[1-9]|10"))
+                return Integer.parseInt(input);
+            System.out.println("Invalid grade!");
+        }
+    }
+
 // TODO: readParent, readTable should be in that tableService
 
 //    public static Parent readParent() throws InvalidId {

@@ -32,7 +32,7 @@ public class ClassSessionView {
         this.groupService = groupService;
     }
 
-    void run () {
+    public void run () {
         while (true) {
             showClassSessionsMenu();
             try {
