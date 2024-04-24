@@ -12,7 +12,7 @@ public class Student extends Person{
     }
 
     public Student(Student student) {
-        super((Person)(student));
+        super(student);
         this.parent = student.parent;
         this.group = student.group;
     }

@@ -1,6 +1,5 @@
 package org.example.view;
 
-import org.example.exceptions.InvalidEmail;
 import org.example.exceptions.InvalidId;
 import org.example.exceptions.InvalidOption;
 import org.example.exceptions.InvalidRequest;
@@ -168,7 +167,6 @@ public class ParentView {
         List<Student> children = getChildren(parent);
         if (children.isEmpty())
             return;
-        int status = 0;
         while(true) {
             showChildren(children);
             Long studentId = readLong("Please choose a child to show activity or 0 to leave");

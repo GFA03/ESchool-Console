@@ -16,10 +16,6 @@ public class TeacherService {
         teacherRepository.add(teacher);
     }
 
-    public void createTeacher(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
-        teacherRepository.create(firstName, lastName, dateOfBirth, email, phoneNumber);
-    }
-
     public Teacher getTeacherById(Long id) {
         return teacherRepository.get(id);
     }
@@ -32,11 +28,26 @@ public class TeacherService {
         teacherRepository.update(updatedTeacher);
     }
 
-    public void updateTeacherFirstName(Teacher teacher, String firstName) { teacherRepository.updateFirstName(teacher, firstName);}
-    public void updateTeacherLastName(Teacher teacher, String lastName) { teacherRepository.updateLastName(teacher, lastName);}
-    public void updateTeacherDateOfBirth(Teacher teacher, String dateOfBirth) { teacherRepository.updateDateOfBirth(teacher, dateOfBirth);}
-    public void updateTeacherEmail(Teacher teacher, String email) { teacherRepository.updateEmail(teacher, email);}
-    public void updateTeacherPhoneNumber(Teacher teacher, String phoneNumber) { teacherRepository.updatePhoneNumber(teacher, phoneNumber);}
+    public void updateTeacherFirstName(Teacher teacher, String firstName) {
+        teacher.setFirstName(firstName);
+        teacherRepository.update(teacher);
+    }
+    public void updateTeacherLastName(Teacher teacher, String lastName) {
+        teacher.setLastName(lastName);
+        teacherRepository.update(teacher);
+    }
+    public void updateTeacherDateOfBirth(Teacher teacher, String dateOfBirth) {
+        teacher.setDateOfBirth(dateOfBirth);
+        teacherRepository.update(teacher);
+    }
+    public void updateTeacherEmail(Teacher teacher, String email) {
+        teacher.setEmail(email);
+        teacherRepository.update(teacher);
+    }
+    public void updateTeacherPhoneNumber(Teacher teacher, String phoneNumber) {
+        teacher.setPhoneNumber(phoneNumber);
+        teacherRepository.update(teacher);
+    }
     public void deleteTeacher(Long id) {
         teacherRepository.delete(id);
     }

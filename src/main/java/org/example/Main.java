@@ -16,7 +16,7 @@ public class Main {
             ParentRepository parentRepository = new ParentRepository(connection);
             ParentService parentService = new ParentService(parentRepository);
 
-            TeacherRepository teacherRepository = new TeacherRepository();
+            TeacherRepository teacherRepository = new TeacherRepository(connection);
             TeacherService teacherService = new TeacherService(teacherRepository);
 
             ClassAttendanceRepository classAttendanceRepository = new ClassAttendanceRepository();
@@ -40,6 +40,7 @@ public class Main {
             ConsoleApp consoleApp = new ConsoleApp(studentService, parentService, teacherService, classAttendanceService, classSessionService, courseService
                     , groupCourseService, groupService);
             consoleApp.run();
+            databaseManager.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
