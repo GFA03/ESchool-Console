@@ -458,17 +458,8 @@ public class ConsoleApp {
     }
 
     private void manageClassSessions() {
-        while (true) {
-            showClassSessionsMenu();
-            try {
-                int option = readOption();
-                int status = executeClassSessionsOptions(option);
-                if (status == -1)
-                    break;
-            } catch (InvalidOption | InvalidRequest | InvalidId e) {
-                System.out.println(e.toString());
-            }
-        }
+        ClassSessionView view = new ClassSessionView(classSessionService, courseService, studentService, classAttendanceService, groupService);
+        view.run();
     }
 
     private void showClassSessionsMenu() {
