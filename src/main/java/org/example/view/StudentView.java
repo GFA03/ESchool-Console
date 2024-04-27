@@ -97,7 +97,7 @@ public class StudentView {
         String phoneNumber = readPhone();
         Parent parent = readParent();
         Group group = getGroup();
-        Student student = new Student(firstName, lastName, dateOfBirth, email, phoneNumber, parent, group);
+        Student student = new Student(1L, firstName, lastName, dateOfBirth, email, phoneNumber, parent, group);
         studentService.add(student);
     }
 

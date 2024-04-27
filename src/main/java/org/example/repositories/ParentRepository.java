@@ -2,84 +2,110 @@ package org.example.repositories;
 
 import org.example.models.Parent;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParentRepository implements GenericRepository<Parent> {
-    private final List<Parent> parents;
+    private final Connection connection;
 
-    public ParentRepository() {
-        parents = new ArrayList<>();
+    public ParentRepository(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
     public void add(Parent parent) {
-        parents.add(parent);
-    }
-
-
-    public void create(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
-        parents.add(new Parent(firstName, lastName, dateOfBirth, email, phoneNumber));
+        String sql = "INSERT INTO parents (first_name, last_name, date_of_birth, email, phone_number) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, parent.getFirstName());
+            statement.setString(2, parent.getLastName());
+            statement.setString(3, parent.getDateOfBirth());
+            statement.setString(4, parent.getEmail());
+            statement.setString(5, parent.getPhoneNumber());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public List<Parent> getAll() {
+        List<Parent> parents = new ArrayList<>();
+        String sql = "SELECT * FROM parents";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Parent parent = new Parent(
+                        resultSet.getLong("id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("date_of_birth"),
+                        resultSet.getString("email"),
+                        resultSet.getString("phone_number")
+                );
+                parents.add(parent);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return parents;
     }
 
     @Override
     public Parent get(Long parentId) {
-        for (Parent parent : parents) {
-            if (parent.getId().equals(parentId))
-                return parent;
+        String sql = "SELECT * FROM parents WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, parentId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new Parent(
+                        resultSet.getLong("id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("date_of_birth"),
+                        resultSet.getString("email"),
+                        resultSet.getString("phone_number")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     @Override
     public void update(Parent updatedParent) {
-        for (int i = 0; i < parents.size(); i++) {
-            if (parents.get(i).getId().equals(updatedParent.getId())) {
-                parents.set(i, updatedParent);
-                return;
-            }
+        String sql = "UPDATE parents SET first_name = ?, last_name = ?, date_of_birth = ?, email = ?, phone_number = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, updatedParent.getFirstName());
+            statement.setString(2, updatedParent.getLastName());
+            statement.setString(3, updatedParent.getDateOfBirth());
+            statement.setString(4, updatedParent.getEmail());
+            statement.setString(5, updatedParent.getPhoneNumber());
+            statement.setLong(6, updatedParent.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    }
-
-    public void updateFirstName(Parent parent, String firstName) {
-        parent.setFirstName(firstName);
-        update(parent);
-    }
-
-    public void updateLastName(Parent parent, String lastName) {
-        parent.setLastName(lastName);
-        update(parent);
-    }
-
-    public void updateDateOfBirth(Parent parent, String dateOfBirth) {
-        parent.setDateOfBirth(dateOfBirth);
-        update(parent);
-    }
-
-    public void updateEmail(Parent parent, String email) {
-        parent.setEmail(email);
-        update(parent);
-    }
-
-    public void updatePhoneNumber(Parent parent, String phoneNumber) {
-        parent.setPhoneNumber(phoneNumber);
-        update(parent);
     }
 
     @Override
     public void delete(Long parentId) {
-        parents.removeIf(parent -> parent.getId().equals(parentId));
+        String sql = "DELETE FROM parents WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, parentId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getSize() {
+        List<Parent> parents = getAll();
         return parents.size();
     }
-
 }
-

@@ -3,25 +3,32 @@ package org.example.models;
 import java.util.Objects;
 
 public class Course {
-    private final Long courseId;
-    private static Long ID_SEQ = 1L;
-    private String courseName;
+    private Long id;
+    private String name;
 
-    public Course(String courseName) {
-        this.courseId = ID_SEQ++;
-        this.courseName = courseName;
+    public Course(Long id) {
+        this.id = id;
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public Course(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public Long getId() {
+        return id;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -29,17 +36,17 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(courseId, course.courseId) && Objects.equals(courseName, course.courseName);
+        return Objects.equals(id, course.id) && Objects.equals(name, course.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, courseName);
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
-        return "Course ID: " + courseId + "\n" +
-                "Name: " + courseName + "\n\n";
+        return "Course ID: " + id + "\n" +
+                "Name: " + name + "\n\n";
     }
 }

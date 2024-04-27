@@ -25,7 +25,7 @@ public class GroupView {
                 if (status == -1)
                     break;
             } catch (InvalidOption | InvalidId e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -83,7 +83,8 @@ public class GroupView {
 
     private void createGroup() {
         String groupName = readName("Enter group name:");
-        groupService.createGroup(groupName);
+        Group group = new Group(1L, groupName);
+        groupService.addGroup(group);
     }
 
     private void updateGroup() throws InvalidId {

@@ -84,7 +84,9 @@ public class TeacherView {
         String dateOfBirth = readDate("Enter date of birth(Format like: 2000-12-30):");
         String email = readEmail();
         String phoneNumber = readPhone();
-        teacherService.createTeacher(firstName, lastName, dateOfBirth, email, phoneNumber);
+        //TODO: Don't hardcode the ID
+        Teacher teacher = new Teacher(1L, firstName, lastName, dateOfBirth, email, phoneNumber);
+        teacherService.addTeacher(teacher);
     }
 
     private void deleteTeacherById() throws InvalidId {

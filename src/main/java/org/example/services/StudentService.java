@@ -1,6 +1,5 @@
 package org.example.services;
 
-import org.example.exceptions.InvalidEmail;
 import org.example.models.ClassAttendance;
 import org.example.models.Group;
 import org.example.models.Parent;
@@ -39,13 +38,35 @@ public class StudentService {
         studentRepository.update(updatedStudent);
     }
 
-    public void updateStudentFirstName(Student student, String firstName) { studentRepository.updateFirstName(student, firstName);}
-    public void updateStudentLastName(Student student, String lastName) { studentRepository.updateLastName(student, lastName);}
-    public void updateStudentDateOfBirth(Student student, String dateOfBirth) { studentRepository.updateDateOfBirth(student, dateOfBirth);}
-    public void updateStudentEmail(Student student, String email) { studentRepository.updateEmail(student, email);}
-    public void updateStudentPhoneNumber(Student student, String phoneNumber) { studentRepository.updatePhoneNumber(student, phoneNumber);}
-    public void updateStudentParent(Student student, Parent parent) { studentRepository.updateParent(student, parent);}
-    public void updateStudentGroup(Student student, Group group) { studentRepository.updateGroup(student, group);}
+    public void updateStudentFirstName(Student student, String firstName) {
+        student.setFirstName(firstName);
+        updateStudent(student);
+
+    }
+    public void updateStudentLastName(Student student, String lastName) {
+        student.setLastName(lastName);
+        updateStudent(student);
+    }
+    public void updateStudentDateOfBirth(Student student, String dateOfBirth) {
+        student.setDateOfBirth(dateOfBirth);
+        updateStudent(student);
+    }
+    public void updateStudentEmail(Student student, String email) {
+        student.setEmail(email);
+        updateStudent(student);
+    }
+    public void updateStudentPhoneNumber(Student student, String phoneNumber) {
+        student.setPhoneNumber(phoneNumber);
+        updateStudent(student);
+    }
+    public void updateStudentParent(Student student, Parent parent) {
+        student.setParent(parent);
+        updateStudent(student);
+    }
+    public void updateStudentGroup(Student student, Group group) {
+        student.setGroup(group);
+        updateStudent(student);
+    }
 
     public void deleteStudent(Long id) {
         studentRepository.delete(id);

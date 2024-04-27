@@ -27,6 +27,7 @@ public class ClassAttendanceService {
     public ClassAttendance getClassAttendance(Long id) {
         return classAttendanceRepository.get(id);
     }
+
     public ClassAttendance getClassAttendanceByStudentAndClassSession(Student student, ClassSession classSession) {
         return classAttendanceRepository.get(student, classSession);
     }
@@ -54,13 +55,6 @@ public class ClassAttendanceService {
         classAttendanceRepository.update(updatedClassAttendance);
     }
 
-    public void updateClassAttendance(ClassAttendance classAttendance, boolean present, Integer grade) {
-        classAttendanceRepository.update(classAttendance, present, grade);
-    }
-
-    public void deleteClassAttendance(Student student, ClassSession classSession) {
-        classAttendanceRepository.delete(student, classSession);
-    }
     public void deleteClassAttendance(Long id) {
         classAttendanceRepository.delete(id);
     }

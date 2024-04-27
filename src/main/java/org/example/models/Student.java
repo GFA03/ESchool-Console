@@ -5,14 +5,14 @@ import java.util.Objects;
 public class Student extends Person{
     private Parent parent;
     private Group group;
-    public Student(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
-        super(firstName, lastName, dateOfBirth, email, phoneNumber);
+    public Student(Long id, String firstName, String lastName, String dateOfBirth, String email, String phoneNumber, Parent parent, Group group) {
+        super(id, firstName, lastName, dateOfBirth, email, phoneNumber);
         this.parent = parent;
         this.group = group;
     }
 
     public Student(Student student) {
-        super((Person)(student));
+        super(student);
         this.parent = student.parent;
         this.group = student.group;
     }
@@ -52,8 +52,8 @@ public class Student extends Person{
     public String toString() {
         return "Student ID: " + super.getId() + "\n" +
                 super.toString() +
-                "Parent: " + (parent != null ? parent.getFirstName() + " " + parent.getLastName() : "None") + "\n" +
-                "Group: " + (group != null ? group.getName() : "None") + "\n\n";
+                "Parent: " + (parent != null ? (parent.getFirstName() == null ? parent.getId() : parent.getFirstName() + " " + parent.getLastName()) : "None") + "\n" +
+                "Group: " + (group != null ? (group.getName() == null ? group.getId() : group.getName()) : "None") + "\n\n";
     }
 
 }

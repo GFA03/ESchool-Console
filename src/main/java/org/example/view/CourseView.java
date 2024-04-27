@@ -81,7 +81,8 @@ public class CourseView {
 
     private void createCourse() {
         String courseName = readName("Enter course name: ");
-        courseService.createCourse(courseName);
+        Course course = new Course(1L, courseName);
+        courseService.addCourse(course);
     }
 
     private void deleteCourseById() throws InvalidId {

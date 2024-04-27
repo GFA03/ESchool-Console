@@ -16,12 +16,15 @@ import static org.example.utils.ReaderUtils.readOption;
 
 public class GroupCourseView {
     private final GroupCourseService groupCourseService;
-    private TeacherService teacherService;
-    private CourseService courseService;
-    private GroupService groupService;
+    private final TeacherService teacherService;
+    private final CourseService courseService;
+    private final GroupService groupService;
 
     public GroupCourseView(GroupCourseService groupCourseService, TeacherService teacherService, CourseService courseService, GroupService groupService) {
         this.groupCourseService = groupCourseService;
+        this.teacherService = teacherService;
+        this.courseService = courseService;
+        this.groupService = groupService;
     }
 
     public void run () {
@@ -33,7 +36,7 @@ public class GroupCourseView {
                 if (status == -1)
                     break;
             } catch (InvalidOption | InvalidId e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -44,7 +47,8 @@ public class GroupCourseView {
         System.out.println("1. Show all group courses");
         System.out.println("2. Show group course by ID");
         System.out.println("3. Create group course");
-        System.out.println("4. Delete group course by ID");
+        System.out.println("4. Update group course's teacher");
+        System.out.println("5. Delete group course by ID");
         System.out.println("9. Exit");
     }
 
@@ -61,6 +65,9 @@ public class GroupCourseView {
                 System.out.println("Group course created successfully!");
                 break;
             case 4:
+                updateGroupCourseTeacher();
+                break;
+            case 5:
                 deleteGroupCourseById();
                 break;
             case 9:
@@ -106,8 +113,24 @@ public class GroupCourseView {
             System.out.println("Teacher ID incorrect!");
             return;
         }
+        GroupCourse groupCourse = new GroupCourse(1L, group, course, teacher);
+        groupCourseService.addGroupCourse(groupCourse);
+    }
 
-        groupCourseService.createGroupCourse(group, course, teacher);
+    private void updateGroupCourseTeacher() throws InvalidId {
+        Long groupCourseId = readLong("Enter group course ID:");
+        GroupCourse groupCourse = groupCourseService.getGroupCourse(groupCourseId);
+        if (groupCourse == null) {
+            System.out.println("Group course doesn't exist!");
+            return;
+        }
+        Long newTeacherId = readLong("Enter new teacher's ID:");
+        Teacher newTeacher = teacherService.getTeacherById(newTeacherId);
+        if (newTeacher == null) {
+            System.out.println("Teacher ID incorrect!");
+            return;
+        }
+        groupCourseService.updateTeacher(groupCourse, newTeacher);
     }
 
     private void deleteGroupCourseById() throws InvalidId {

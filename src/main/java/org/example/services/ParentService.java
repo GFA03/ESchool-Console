@@ -16,10 +16,6 @@ public class ParentService {
         parentRepository.add(parent);
     }
 
-    public void createParent(String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
-        parentRepository.create(firstName, lastName, dateOfBirth, email, phoneNumber);
-    }
-
     public Parent getParentById(Long id) {
         return parentRepository.get(id);
     }
@@ -32,11 +28,26 @@ public class ParentService {
         parentRepository.update(updatedParent);
     }
 
-    public void updateParentFirstName(Parent parent, String firstName) { parentRepository.updateFirstName(parent, firstName);}
-    public void updateParentLastName(Parent parent, String lastName) { parentRepository.updateLastName(parent, lastName);}
-    public void updateParentDateOfBirth(Parent parent, String dateOfBirth) { parentRepository.updateDateOfBirth(parent, dateOfBirth);}
-    public void updateParentEmail(Parent parent, String email) { parentRepository.updateEmail(parent, email);}
-    public void updateParentPhoneNumber(Parent parent, String phoneNumber) { parentRepository.updatePhoneNumber(parent, phoneNumber);}
+    public void updateParentFirstName(Parent parent, String firstName) {
+        parent.setFirstName(firstName);
+        parentRepository.update(parent);
+    }
+    public void updateParentLastName(Parent parent, String lastName) {
+        parent.setLastName(lastName);
+        parentRepository.update(parent);
+    }
+    public void updateParentDateOfBirth(Parent parent, String dateOfBirth) {
+        parent.setDateOfBirth(dateOfBirth);
+        parentRepository.update(parent);
+    }
+    public void updateParentEmail(Parent parent, String email) {
+        parent.setEmail(email);
+        parentRepository.update(parent);
+    }
+    public void updateParentPhoneNumber(Parent parent, String phoneNumber) {
+        parent.setPhoneNumber(phoneNumber);
+        parentRepository.update(parent);
+    }
 
 
     public void deleteParent(Long id) {

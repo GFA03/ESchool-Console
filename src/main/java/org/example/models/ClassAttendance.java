@@ -4,22 +4,21 @@ import java.util.Objects;
 
 public class ClassAttendance {
     private final Long id;
-    private static Long ID_SEQ = 1L;
     private Student student;
     private ClassSession classSession;
     boolean present;
     Integer grade;
 
-    public ClassAttendance(Student student, ClassSession classSession) {
-        this.id = ID_SEQ++;
+    public ClassAttendance(Long id, Student student, ClassSession classSession) {
+        this.id = id;
         this.student = student;
         this.classSession = classSession;
         this.present = true;
         this.grade = null;
     }
 
-    public ClassAttendance(Student student, ClassSession classSession, boolean present, Integer grade) {
-        this.id = ID_SEQ++;
+    public ClassAttendance(Long id, Student student, ClassSession classSession, boolean present, Integer grade) {
+        this.id = id;
         this.student = student;
         this.classSession = classSession;
         this.present = present;

@@ -4,13 +4,12 @@ import java.util.Objects;
 
 public class GroupCourse {
     private final Long id;
-    private static Long ID_SEQ = 1L;
     private Group group;
     private Course course;
     private Teacher teacher;
 
-    public GroupCourse(Group group, Course course, Teacher teacher) {
-        this.id = ID_SEQ++;
+    public GroupCourse(Long id, Group group, Course course, Teacher teacher) {
+        this.id = id;
         this.group = group;
         this.course = course;
         this.teacher = teacher;
@@ -61,7 +60,7 @@ public class GroupCourse {
     public String toString() {
         return "GroupCourse ID: " + id + "\n" +
                 "Group: " + group.getId() + "\n" +
-                "Course: " + course.getCourseId() + "\n" +
+                "Course: " + course.getId() + "\n" +
                 "Teacher: " + teacher.getId() + "\n\n";
     }
 }
