@@ -16,9 +16,6 @@ public class GroupCourseService {
         groupCourseRepository.add(groupCourse);
     }
 
-    public void createGroupCourse(Group group, Course course, Teacher teacher) {
-        groupCourseRepository.create(group, course, teacher);
-    }
     public GroupCourse getGroupCourse(Long groupCourseId) {
         return groupCourseRepository.get(groupCourseId);
     }
@@ -35,10 +32,13 @@ public class GroupCourseService {
         groupCourseRepository.update(updatedGroupCourse);
     }
 
-    public void updateTeacher(GroupCourse groupCourse, Teacher newTeacher) { groupCourseRepository.updateTeacher(groupCourse, newTeacher);}
+    public void updateTeacher(GroupCourse groupCourse, Teacher newTeacher) {
+        groupCourse.setTeacher(newTeacher);
+        updateGroupCourse(groupCourse);
+    }
 
     public void deleteGroupCourse(GroupCourse groupCourse) {
-        groupCourseRepository.delete(groupCourse);
+        groupCourseRepository.delete(groupCourse.getId());
     }
 
     public void deleteGroupCourse(Long id) { groupCourseRepository.delete(id);}

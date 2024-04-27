@@ -106,8 +106,8 @@ public class GroupCourseView {
             System.out.println("Teacher ID incorrect!");
             return;
         }
-
-        groupCourseService.createGroupCourse(group, course, teacher);
+        GroupCourse groupCourse = new GroupCourse(1L, group, course, teacher);
+        groupCourseService.addGroupCourse(groupCourse);
     }
 
     private void deleteGroupCourseById() throws InvalidId {

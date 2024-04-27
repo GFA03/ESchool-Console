@@ -190,10 +190,10 @@ public class ConsoleApp {
         if (groupCourseService.getSize() != 0) {
             return;
         }
-        GroupCourse groupCourse1 = new GroupCourse(groupService.getGroupById(1L), courseService.getCourseById(1L), teacherService.getTeacherById(1L));
-        GroupCourse groupCourse2 = new GroupCourse(groupService.getGroupById(2L), courseService.getCourseById(2L), teacherService.getTeacherById(1L));
-        GroupCourse groupCourse3 = new GroupCourse(groupService.getGroupById(3L), courseService.getCourseById(3L), teacherService.getTeacherById(2L));
-        GroupCourse groupCourse4 = new GroupCourse(groupService.getGroupById(4L), courseService.getCourseById(4L), teacherService.getTeacherById(2L));
+        GroupCourse groupCourse1 = new GroupCourse(1L, groupService.getGroupById(1L), courseService.getCourseById(1L), teacherService.getTeacherById(1L));
+        GroupCourse groupCourse2 = new GroupCourse(2L, groupService.getGroupById(2L), courseService.getCourseById(2L), teacherService.getTeacherById(1L));
+        GroupCourse groupCourse3 = new GroupCourse(3L, groupService.getGroupById(3L), courseService.getCourseById(3L), teacherService.getTeacherById(2L));
+        GroupCourse groupCourse4 = new GroupCourse(4L, groupService.getGroupById(4L), courseService.getCourseById(4L), teacherService.getTeacherById(2L));
         groupCourseService.addGroupCourse(groupCourse1);
         groupCourseService.addGroupCourse(groupCourse2);
         groupCourseService.addGroupCourse(groupCourse3);

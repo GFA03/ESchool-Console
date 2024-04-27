@@ -31,7 +31,7 @@ public class Main {
             CourseRepository courseRepository = new CourseRepository(connection);
             CourseService courseService = new CourseService(courseRepository);
 
-            GroupCourseRepository groupCourseRepository = new GroupCourseRepository();
+            GroupCourseRepository groupCourseRepository = new GroupCourseRepository(connection);
             GroupCourseService groupCourseService = new GroupCourseService(groupCourseRepository);
 
             GroupRepository groupRepository = new GroupRepository(connection);
