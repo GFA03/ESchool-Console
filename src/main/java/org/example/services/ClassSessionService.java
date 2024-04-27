@@ -1,8 +1,6 @@
 package org.example.services;
 
 import org.example.models.ClassSession;
-import org.example.models.Course;
-import org.example.models.Group;
 import org.example.repositories.ClassSessionRepository;
 
 import java.util.List;

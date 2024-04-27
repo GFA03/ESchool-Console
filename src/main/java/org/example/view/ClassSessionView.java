@@ -7,7 +7,6 @@ import org.example.models.ClassSession;
 import org.example.models.Course;
 import org.example.models.Group;
 import org.example.models.Student;
-import org.example.repositories.ClassAttendanceRepository;
 import org.example.services.*;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class ClassSessionView {
                 if (status == -1)
                     break;
             } catch (InvalidOption | InvalidRequest | InvalidId e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
     }

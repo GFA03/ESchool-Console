@@ -7,7 +7,6 @@ import org.example.models.ClassSession;
 import org.example.services.ClassAttendanceService;
 import org.example.services.ClassSessionService;
 
-import java.util.Objects;
 
 import static org.example.utils.ReaderUtils.*;
 
@@ -29,7 +28,7 @@ public class ClassAttendanceView {
                 if (status == -1)
                     break;
             } catch (InvalidOption | InvalidId e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
     }

@@ -106,8 +106,6 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 Long id = resultSet.getLong("id");
-                Long studentId = resultSet.getLong("student_id");
-                Long classSessionId = resultSet.getLong("class_session_id");
                 boolean present = resultSet.getBoolean("present");
                 Integer grade = resultSet.getInt("grade");
                 return new ClassAttendance(id, student, classSession, present, grade);

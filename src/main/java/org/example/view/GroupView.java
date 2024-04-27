@@ -25,7 +25,7 @@ public class GroupView {
                 if (status == -1)
                     break;
             } catch (InvalidOption | InvalidId e) {
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
     }

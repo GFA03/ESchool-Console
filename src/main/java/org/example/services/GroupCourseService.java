@@ -37,10 +37,6 @@ public class GroupCourseService {
         updateGroupCourse(groupCourse);
     }
 
-    public void deleteGroupCourse(GroupCourse groupCourse) {
-        groupCourseRepository.delete(groupCourse.getId());
-    }
-
     public void deleteGroupCourse(Long id) { groupCourseRepository.delete(id);}
 
     public int getSize() {
