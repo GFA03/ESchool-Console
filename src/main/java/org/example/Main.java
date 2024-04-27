@@ -22,7 +22,7 @@ public class Main {
             ClassAttendanceRepository classAttendanceRepository = new ClassAttendanceRepository();
             ClassAttendanceService classAttendanceService = new ClassAttendanceService(classAttendanceRepository);
 
-            StudentRepository studentRepository = new StudentRepository();
+            StudentRepository studentRepository = new StudentRepository(connection);
             StudentService studentService = new StudentService(studentRepository, classAttendanceService);
 
             ClassSessionRepository classSessionRepository = new ClassSessionRepository();

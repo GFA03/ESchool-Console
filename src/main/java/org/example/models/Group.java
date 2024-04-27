@@ -12,6 +12,11 @@ public class Group {
         this.name = name;
     }
 
+    public Group(Long id) {
+        this.id = id;
+        this.name = null;
+    }
+
     public Long getId() {
         return id;
     }

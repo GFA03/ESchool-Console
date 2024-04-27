@@ -5,6 +5,10 @@ public class Parent extends Person{
         super(id, firstName, lastName, dateOfBirth, email, phoneNumber);
     }
 
+    public Parent(Long id) {
+        super(id, null, null, null, null, null);
+    }
+
     @Override
     public String toString() {
         return "Parent ID: " + super.getId() + "\n" +

@@ -39,13 +39,35 @@ public class StudentService {
         studentRepository.update(updatedStudent);
     }
 
-    public void updateStudentFirstName(Student student, String firstName) { studentRepository.updateFirstName(student, firstName);}
-    public void updateStudentLastName(Student student, String lastName) { studentRepository.updateLastName(student, lastName);}
-    public void updateStudentDateOfBirth(Student student, String dateOfBirth) { studentRepository.updateDateOfBirth(student, dateOfBirth);}
-    public void updateStudentEmail(Student student, String email) { studentRepository.updateEmail(student, email);}
-    public void updateStudentPhoneNumber(Student student, String phoneNumber) { studentRepository.updatePhoneNumber(student, phoneNumber);}
-    public void updateStudentParent(Student student, Parent parent) { studentRepository.updateParent(student, parent);}
-    public void updateStudentGroup(Student student, Group group) { studentRepository.updateGroup(student, group);}
+    public void updateStudentFirstName(Student student, String firstName) {
+        student.setFirstName(firstName);
+        studentRepository.update(student);
+
+    }
+    public void updateStudentLastName(Student student, String lastName) {
+        student.setLastName(lastName);
+        studentRepository.update(student);
+    }
+    public void updateStudentDateOfBirth(Student student, String dateOfBirth) {
+        student.setDateOfBirth(dateOfBirth);
+        studentRepository.update(student);
+    }
+    public void updateStudentEmail(Student student, String email) {
+        student.setEmail(email);
+        studentRepository.update(student);
+    }
+    public void updateStudentPhoneNumber(Student student, String phoneNumber) {
+        student.setPhoneNumber(phoneNumber);
+        studentRepository.update(student);
+    }
+    public void updateStudentParent(Student student, Parent parent) {
+        student.setParent(parent);
+        studentRepository.update(student);
+    }
+    public void updateStudentGroup(Student student, Group group) {
+        student.setGroup(group);
+        studentRepository.update(student);
+    }
 
     public void deleteStudent(Long id) {
         studentRepository.delete(id);

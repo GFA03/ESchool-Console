@@ -5,7 +5,7 @@ import java.time.Period;
 import java.util.Objects;
 
 public abstract class Person {
-    private final Long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
@@ -36,6 +36,10 @@ public abstract class Person {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
