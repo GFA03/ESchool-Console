@@ -19,7 +19,7 @@ public class Main {
             TeacherRepository teacherRepository = new TeacherRepository(connection);
             TeacherService teacherService = new TeacherService(teacherRepository);
 
-            ClassAttendanceRepository classAttendanceRepository = new ClassAttendanceRepository();
+            ClassAttendanceRepository classAttendanceRepository = new ClassAttendanceRepository(connection);
             ClassAttendanceService classAttendanceService = new ClassAttendanceService(classAttendanceRepository);
 
             StudentRepository studentRepository = new StudentRepository(connection);

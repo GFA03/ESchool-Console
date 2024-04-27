@@ -4,98 +4,156 @@ import org.example.models.ClassAttendance;
 import org.example.models.ClassSession;
 import org.example.models.Student;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassAttendanceRepository implements GenericRepository<ClassAttendance>{
-    private final List<ClassAttendance> classAttendances;
+public class ClassAttendanceRepository implements GenericRepository<ClassAttendance> {
+    private final Connection connection;
 
-    public ClassAttendanceRepository() {
-        classAttendances = new ArrayList<>();
+    public ClassAttendanceRepository(Connection connection) {
+        this.connection = connection;
     }
 
+    @Override
     public void add(ClassAttendance classAttendance) {
-        classAttendances.add(classAttendance);
-    }
-
-    public void create(Student student, ClassSession classSession) {
-        classAttendances.add(new ClassAttendance(1L, student, classSession));
-    }
-
-    public void create(Student student, ClassSession classSession, boolean present, Integer grade) {
-        classAttendances.add(new ClassAttendance(1L, student, classSession, present, grade));
+        String query = "INSERT INTO class_attendances (student_id, class_session_id, present, grade) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, classAttendance.getStudent().getId());
+            statement.setLong(2, classAttendance.getClassSession().getId());
+            statement.setBoolean(3, classAttendance.isPresent());
+            statement.setInt(4, classAttendance.getGrade());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createForGroup(List<Student> studentByGroup, ClassSession classSession) {
         for(Student student: studentByGroup)
-            create(student, classSession);
+            add(new ClassAttendance(1L, student, classSession));
     }
 
+    @Override
     public List<ClassAttendance> getAll() {
-        return new ArrayList<>(classAttendances);
+        List<ClassAttendance> classAttendances = new ArrayList<>();
+        String query = "SELECT * FROM class_attendances";
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                Long studentId = resultSet.getLong("student_id");
+                Long classSessionId = resultSet.getLong("class_session_id");
+                boolean present = resultSet.getBoolean("present");
+                Integer grade = resultSet.getInt("grade");
+                Student student = new StudentRepository(connection).get(studentId);
+                ClassSession classSession = new ClassSessionRepository(connection).get(classSessionId);
+                classAttendances.add(new ClassAttendance(id, student, classSession, present, grade));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return classAttendances;
     }
 
-    public ClassAttendance get(Long id) {
-        for (ClassAttendance classAttendance : classAttendances) {
-            if (classAttendance.getId().equals(id))
-                return classAttendance;
-        }
-        return null;
-    }
-    public ClassAttendance get(Student student, ClassSession classSession) {
-        for (ClassAttendance classAttendance : classAttendances) {
-            if (classAttendance.getStudent().equals(student) && classAttendance.getClassSession().equals(classSession))
-                return classAttendance;
-        }
-        return null;
-    }
 
     public List<ClassAttendance> getByStudent(Student student) {
-        List<ClassAttendance> studentClasses = new ArrayList<>();
-        for(ClassAttendance classAtt: classAttendances) {
-            if(classAtt.getStudent().equals(student))
-                studentClasses.add(classAtt);
-        }
-        return studentClasses;
-    }
-
-    public void update(ClassAttendance updatedClassAttendance) {
-        for (int i = 0; i < classAttendances.size(); i++) {
-            ClassAttendance classAttendance = classAttendances.get(i);
-            if (classAttendance.getStudent().equals(updatedClassAttendance.getStudent())
-                    && classAttendance.getClassSession().equals(updatedClassAttendance.getClassSession())) {
-                classAttendances.set(i, updatedClassAttendance);
-                return;
+        List<ClassAttendance> classAttendances = new ArrayList<>();
+        String query = "SELECT * FROM class_attendances where student_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, student.getId());
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                Long classSessionId = resultSet.getLong("class_session_id");
+                boolean present = resultSet.getBoolean("present");
+                Integer grade = resultSet.getInt("grade");
+                ClassSession classSession = new ClassSessionRepository(connection).get(classSessionId);
+                classAttendances.add(new ClassAttendance(id, student, classSession, present, grade));
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return classAttendances;
+    }
+
+    @Override
+    public ClassAttendance get(Long id) {
+        String query = "SELECT * FROM class_attendances WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Long studentId = resultSet.getLong("student_id");
+                Long classSessionId = resultSet.getLong("class_session_id");
+                boolean present = resultSet.getBoolean("present");
+                Integer grade = resultSet.getInt("grade");
+                Student student = new StudentRepository(connection).get(studentId);
+                ClassSession classSession = new ClassSessionRepository(connection).get(classSessionId);
+                return new ClassAttendance(id, student, classSession, present, grade);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ClassAttendance get(Student student, ClassSession classSession) {
+        String query = "SELECT * FROM class_attendances WHERE student_id = ? and class_session_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, student.getId());
+            statement.setLong(2, classSession.getId());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                Long studentId = resultSet.getLong("student_id");
+                Long classSessionId = resultSet.getLong("class_session_id");
+                boolean present = resultSet.getBoolean("present");
+                Integer grade = resultSet.getInt("grade");
+                return new ClassAttendance(id, student, classSession, present, grade);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void update(ClassAttendance classAttendance) {
+        String query = "UPDATE class_attendances SET present = ?, grade = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setBoolean(1, classAttendance.isPresent());
+            statement.setInt(2, classAttendance.getGrade());
+            statement.setLong(3, classAttendance.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    public void update(ClassAttendance classAttendance, boolean present, Integer grade) {
-        updatePresence(classAttendance, present);
-        updateGrade(classAttendance, grade);
-    }
-
-    public void updatePresence(ClassAttendance classAttendance, boolean present) {
-        classAttendance.setPresent(present);
-        update(classAttendance);
-    }
-
-    public void updateGrade(ClassAttendance classAttendance, Integer grade) {
-        classAttendance.setGrade(grade);
-        update(classAttendance);
-    }
-
+    @Override
     public void delete(Long id) {
-        classAttendances.removeIf(classAttendance ->
-                classAttendance.getId().equals(id));
-    }
-    public void delete(Student student, ClassSession classSession) {
-        classAttendances.removeIf(classAttendance ->
-                classAttendance.getStudent().equals(student) && classAttendance.getClassSession().equals(classSession));
+        String query = "DELETE FROM class_attendances WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    @Override
     public int getSize() {
-        return classAttendances.size();
+        int size = 0;
+        String query = "SELECT COUNT(*) AS count FROM class_attendances";
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            if (resultSet.next()) {
+                size = resultSet.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return size;
     }
-
 }

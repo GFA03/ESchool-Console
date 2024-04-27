@@ -69,11 +69,11 @@ public class StudentRepository implements GenericRepository<Student> {
                 );
                 long parentId = resultSet.getLong("parent_id");
                 if (!resultSet.wasNull()) {
-                    student.setParent(new Parent(parentId));
+                    student.setParent(new ParentRepository(connection).get(parentId));
                 }
                 long groupId = resultSet.getLong("group_id");
                 if (!resultSet.wasNull()) {
-                    student.setGroup(new Group(groupId));
+                    student.setGroup(new GroupRepository(connection).get(groupId));
                 }
                 students.add(student);
             }
@@ -102,11 +102,11 @@ public class StudentRepository implements GenericRepository<Student> {
                     );
                     long parentId = resultSet.getLong("parent_id");
                     if (!resultSet.wasNull()) {
-                        student.setParent(new Parent(parentId));
+                        student.setParent(new ParentRepository(connection).get(parentId));
                     }
                     long groupId = resultSet.getLong("group_id");
                     if (!resultSet.wasNull()) {
-                        student.setGroup(new Group(groupId)); // Assuming you have a Group constructor that takes an ID
+                        student.setGroup(new GroupRepository(connection).get(groupId));
                     }
                     return student;
                 }
@@ -137,7 +137,7 @@ public class StudentRepository implements GenericRepository<Student> {
                 );
                 long groupId = resultSet.getLong("group_id");
                 if (!resultSet.wasNull()) {
-                    student.setGroup(new Group(groupId));
+                    student.setGroup(new GroupRepository(connection).get(groupId));
                 }
                 students.add(student);
             }
@@ -167,7 +167,7 @@ public class StudentRepository implements GenericRepository<Student> {
                 );
                 long parentId = resultSet.getLong("parent_id");
                 if (!resultSet.wasNull()) {
-                    student.setParent(new Parent(parentId));
+                    student.setParent(new ParentRepository(connection).get(parentId));
                 }
                 students.add(student);
             }

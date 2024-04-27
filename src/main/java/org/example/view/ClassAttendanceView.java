@@ -99,7 +99,9 @@ public class ClassAttendanceView {
             if (present) {
                 grade = readGrade();
             }
-            classAttendanceService.updateClassAttendance(classAttendance, present, grade);
+            classAttendance.setPresent(present);
+            classAttendance.setGrade(grade);
+            classAttendanceService.updateClassAttendance(classAttendance);
             System.out.println("Class attendance updated successfully!");
         } else {
             System.out.println("Class attendance ID incorrect!");
