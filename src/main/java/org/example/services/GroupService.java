@@ -16,8 +16,6 @@ public class GroupService {
         groupRepository.add(group);
     }
 
-    public void createGroup(String name) { groupRepository.create(name);}
-
     public Group getGroupById(Long id) {
         return groupRepository.get(id);
     }
@@ -30,7 +28,10 @@ public class GroupService {
         groupRepository.update(updatedGroup);
     }
 
-    public void updateGroupName(Group group, String name) { groupRepository.updateName(group, name);}
+    public void updateGroupName(Group group, String name) {
+        group.setName(name);
+        this.updateGroup(group);
+    }
 
     public void deleteGroup(Long id) {
         groupRepository.delete(id);

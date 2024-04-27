@@ -52,8 +52,8 @@ public class Student extends Person{
     public String toString() {
         return "Student ID: " + super.getId() + "\n" +
                 super.toString() +
-                "Parent: " + (parent != null ? parent.getFirstName() + " " + parent.getLastName() : "None") + "\n" +
-                "Group: " + (group != null ? group.getName() : "None") + "\n\n";
+                "Parent: " + (parent != null ? (parent.getFirstName() == null ? parent.getId() : parent.getFirstName() + " " + parent.getLastName()) : "None") + "\n" +
+                "Group: " + (group != null ? (group.getName() == null ? group.getId() : group.getName()) : "None") + "\n\n";
     }
 
 }

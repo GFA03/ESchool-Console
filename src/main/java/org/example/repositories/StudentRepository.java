@@ -102,7 +102,7 @@ public class StudentRepository implements GenericRepository<Student> {
                     );
                     long parentId = resultSet.getLong("parent_id");
                     if (!resultSet.wasNull()) {
-                        student.setParent(new Parent(parentId)); // Assuming you have a Parent constructor that takes an ID
+                        student.setParent(new Parent(parentId));
                     }
                     long groupId = resultSet.getLong("group_id");
                     if (!resultSet.wasNull()) {

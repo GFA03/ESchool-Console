@@ -12,6 +12,10 @@ public abstract class Person {
     private String email;
     private String phoneNumber;
 
+    Person(Long id) {
+        this.id = id;
+    }
+
     public Person(Long id, String firstName, String lastName, String dateOfBirth, String email, String phoneNumber) {
         this.id = id;
         this.firstName = firstName;

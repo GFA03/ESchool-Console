@@ -152,16 +152,16 @@ public class ConsoleApp {
         if (groupService.getSize() != 0) {
             return;
         }
-        Group group = new Group("XII A");
-        Group group2 = new Group("XII B");
-        Group group3 = new Group("XII C");
-        Group group4 = new Group("XII D");
+        Group group = new Group(1L, "XII A");
+        Group group2 = new Group(1L, "XII B");
+        Group group3 = new Group(1L, "XII C");
+        Group group4 = new Group(1L,"XII D");
         groupService.addGroup(group);
         groupService.addGroup(group2);
         groupService.addGroup(group3);
         groupService.addGroup(group4);
     }
-
+//TODO: If there is none in getSize and you print all, print "There is none"
     private void populateCourses() {
         if (courseService.getSize() != 0) {
             return;

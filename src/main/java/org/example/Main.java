@@ -34,7 +34,7 @@ public class Main {
             GroupCourseRepository groupCourseRepository = new GroupCourseRepository();
             GroupCourseService groupCourseService = new GroupCourseService(groupCourseRepository);
 
-            GroupRepository groupRepository = new GroupRepository();
+            GroupRepository groupRepository = new GroupRepository(connection);
             GroupService groupService = new GroupService(groupRepository);
 
             ConsoleApp consoleApp = new ConsoleApp(studentService, parentService, teacherService, classAttendanceService, classSessionService, courseService

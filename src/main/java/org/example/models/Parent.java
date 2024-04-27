@@ -6,7 +6,7 @@ public class Parent extends Person{
     }
 
     public Parent(Long id) {
-        super(id, null, null, null, null, null);
+        super(id);
     }
 
     @Override
