@@ -4,11 +4,10 @@ import java.util.Objects;
 
 public class Course {
     private final Long id;
-    private static Long ID_SEQ = 1L;
     private String name;
 
-    public Course(String name) {
-        this.id = ID_SEQ++;
+    public Course(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

@@ -28,7 +28,7 @@ public class Main {
             ClassSessionRepository classSessionRepository = new ClassSessionRepository();
             ClassSessionService classSessionService = new ClassSessionService(classSessionRepository);
 
-            CourseRepository courseRepository = new CourseRepository();
+            CourseRepository courseRepository = new CourseRepository(connection);
             CourseService courseService = new CourseService(courseRepository);
 
             GroupCourseRepository groupCourseRepository = new GroupCourseRepository();

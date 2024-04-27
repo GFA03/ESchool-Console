@@ -166,10 +166,10 @@ public class ConsoleApp {
         if (courseService.getSize() != 0) {
             return;
         }
-        Course course1 = new Course("Mathematics");
-        Course course2 = new Course("Physics");
-        Course course3 = new Course("Chemistry");
-        Course course4 = new Course("Biology");
+        Course course1 = new Course(1L, "Mathematics");
+        Course course2 = new Course(2L,"Physics");
+        Course course3 = new Course(3L, "Chemistry");
+        Course course4 = new Course(4L, "Biology");
         courseService.addCourse(course1);
         courseService.addCourse(course2);
         courseService.addCourse(course3);

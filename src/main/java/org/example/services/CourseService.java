@@ -16,8 +16,6 @@ public class CourseService {
         courseRepository.add(course);
     }
 
-    public void createCourse(String name) { courseRepository.create(name);}
-
     public Course getCourseById(Long id) {
         return courseRepository.get(id);
     }
@@ -31,7 +29,8 @@ public class CourseService {
     }
 
     public void updateCourseName(Course course, String name) {
-        courseRepository.updateName(course, name);
+        course.setName(name);
+        this.updateCourse(course);
     }
     public void deleteCourse(Long id) {
         courseRepository.delete(id);
