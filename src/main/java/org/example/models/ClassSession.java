@@ -5,14 +5,13 @@ import java.util.Objects;
 
 public class ClassSession {
     private final Long id;
-    private static Long ID_SEQ = 1L;
     private String name;
     private Course course;
     private Group group;
     private LocalDate sessionDate;
 
-    public ClassSession(String name, Course course, Group group, String sessionDate) {
-        this.id = ID_SEQ++;
+    public ClassSession(Long id, String name, Course course, Group group, String sessionDate) {
+        this.id = id;
         this.name = name;
         this.course = course;
         this.group = group;

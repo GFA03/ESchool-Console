@@ -25,7 +25,7 @@ public class Main {
             StudentRepository studentRepository = new StudentRepository(connection);
             StudentService studentService = new StudentService(studentRepository, classAttendanceService);
 
-            ClassSessionRepository classSessionRepository = new ClassSessionRepository();
+            ClassSessionRepository classSessionRepository = new ClassSessionRepository(connection);
             ClassSessionService classSessionService = new ClassSessionService(classSessionRepository);
 
             CourseRepository courseRepository = new CourseRepository(connection);

@@ -18,9 +18,6 @@ public class ClassSessionService {
         classSessionRepository.add(classSession);
     }
 
-    public void createClassSession(String name, Course course, Group group, String sessionDate) {
-        classSessionRepository.create(name, course, group, sessionDate);
-    }
     public ClassSession getClassSessionById(Long id) {
         return classSessionRepository.get(id);
     }
@@ -34,11 +31,13 @@ public class ClassSessionService {
     }
 
     public void updateClassSessionName(ClassSession classSession, String name) {
-        classSessionRepository.updateName(classSession, name);
+        classSession.setName(name);
+        this.updateClassSession(classSession);
     }
 
     public void updateClassSessionSessionDate(ClassSession classSession, String sessionDate) {
-        classSessionRepository.updateSessionDate(classSession, sessionDate);
+        classSession.setSessionDate(sessionDate);
+        this.updateClassSession(classSession);
     }
 
     public void deleteClassSession(Long id) {

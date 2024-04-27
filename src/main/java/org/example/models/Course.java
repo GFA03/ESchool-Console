@@ -3,8 +3,12 @@ package org.example.models;
 import java.util.Objects;
 
 public class Course {
-    private final Long id;
+    private Long id;
     private String name;
+
+    public Course(Long id) {
+        this.id = id;
+    }
 
     public Course(Long id, String name) {
         this.id = id;
@@ -13,6 +17,10 @@ public class Course {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

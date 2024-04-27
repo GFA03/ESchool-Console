@@ -100,7 +100,7 @@ public class ClassSessionView {
         Course course = getCourse();
         Group group = getGroup();
         String sessionDate = readDate("Enter session date (YYYY-MM-DD): ");
-        ClassSession classSession = new ClassSession(name, course, group, sessionDate);
+        ClassSession classSession = new ClassSession(1L, name, course, group, sessionDate);
         classSessionService.addClassSession(classSession);
         return classSession;
     }
