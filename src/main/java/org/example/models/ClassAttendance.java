@@ -3,7 +3,7 @@ package org.example.models;
 import java.util.Objects;
 
 public class ClassAttendance {
-    private final Long id;
+    private Long id;
     private Student student;
     private ClassSession classSession;
     boolean present;
@@ -29,6 +29,10 @@ public class ClassAttendance {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Student getStudent() {
         return student;
     }
@@ -50,9 +54,6 @@ public class ClassAttendance {
     }
 
     public void setPresent(boolean present) {
-//        Cannot change to absent, if he has a grade
-        if(!Objects.equals(grade, null) && !present)
-            return;
         this.present = present;
     }
 

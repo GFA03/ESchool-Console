@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class ClassSession {
-    private final Long id;
+    private Long id;
     private String name;
     private Course course;
     private Group group;
@@ -21,6 +21,8 @@ public class ClassSession {
     public Long getId() {
         return id;
     }
+
+    public void setId(Long id) { this.id = id;}
 
     public String getName() {
         return name;

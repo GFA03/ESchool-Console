@@ -30,23 +30,23 @@ public class ParentService {
 
     public void updateParentFirstName(Parent parent, String firstName) {
         parent.setFirstName(firstName);
-        parentRepository.update(parent);
+        updateParent(parent);
     }
     public void updateParentLastName(Parent parent, String lastName) {
         parent.setLastName(lastName);
-        parentRepository.update(parent);
+        updateParent(parent);
     }
     public void updateParentDateOfBirth(Parent parent, String dateOfBirth) {
         parent.setDateOfBirth(dateOfBirth);
-        parentRepository.update(parent);
+        updateParent(parent);
     }
     public void updateParentEmail(Parent parent, String email) {
         parent.setEmail(email);
-        parentRepository.update(parent);
+        updateParent(parent);
     }
     public void updateParentPhoneNumber(Parent parent, String phoneNumber) {
         parent.setPhoneNumber(phoneNumber);
-        parentRepository.update(parent);
+        updateParent(parent);
     }
 
 

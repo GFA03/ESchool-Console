@@ -205,6 +205,7 @@ public class ParentView {
 
     private void showUpdateParentMenu() {
         showUpdatePersonMenu();
+        System.out.println("9. Exit");
     }
 
     private int executeParentUpdateOption(int option, Parent parent) {

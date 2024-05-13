@@ -3,6 +3,7 @@ package org.example.repositories;
 import org.example.models.ClassAttendance;
 import org.example.models.ClassSession;
 import org.example.models.Student;
+import org.example.services.AuditService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,20 +11,31 @@ import java.util.List;
 
 public class ClassAttendanceRepository implements GenericRepository<ClassAttendance> {
     private final Connection connection;
+    private final AuditService auditService;
 
-    public ClassAttendanceRepository(Connection connection) {
+    public ClassAttendanceRepository(Connection connection, AuditService auditService) {
         this.connection = connection;
+        this.auditService = auditService;
     }
 
     @Override
     public void add(ClassAttendance classAttendance) {
         String query = "INSERT INTO class_attendances (student_id, class_session_id, present, grade) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setLong(1, classAttendance.getStudent().getId());
             statement.setLong(2, classAttendance.getClassSession().getId());
             statement.setBoolean(3, classAttendance.isPresent());
-            statement.setInt(4, classAttendance.getGrade());
+            if (classAttendance.getGrade() == null) {
+                statement.setNull(4, Types.INTEGER);
+            } else {
+                statement.setInt(4, classAttendance.getGrade());
+            }
             statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                classAttendance.setId(resultSet.getLong(1));
+            }
+            auditService.logAdd("Class Attendance", classAttendance.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -32,6 +44,7 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
     public void createForGroup(List<Student> studentByGroup, ClassSession classSession) {
         for(Student student: studentByGroup)
             add(new ClassAttendance(1L, student, classSession));
+        auditService.logAdd("Class Attendance for Class Session", classSession.getId().toString());
     }
 
     @Override
@@ -46,13 +59,14 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
                 Long classSessionId = resultSet.getLong("class_session_id");
                 boolean present = resultSet.getBoolean("present");
                 Integer grade = resultSet.getInt("grade");
-                Student student = new StudentRepository(connection).get(studentId);
-                ClassSession classSession = new ClassSessionRepository(connection).get(classSessionId);
+                Student student = new StudentRepository(connection, auditService).get(studentId);
+                ClassSession classSession = new ClassSessionRepository(connection, auditService).get(classSessionId);
                 classAttendances.add(new ClassAttendance(id, student, classSession, present, grade));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All Class Attendances", null);
         return classAttendances;
     }
 
@@ -62,18 +76,20 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
         String query = "SELECT * FROM class_attendances where student_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, student.getId());
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                Long id = resultSet.getLong("id");
-                Long classSessionId = resultSet.getLong("class_session_id");
-                boolean present = resultSet.getBoolean("present");
-                Integer grade = resultSet.getInt("grade");
-                ClassSession classSession = new ClassSessionRepository(connection).get(classSessionId);
-                classAttendances.add(new ClassAttendance(id, student, classSession, present, grade));
+            try(ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Long id = resultSet.getLong("id");
+                    Long classSessionId = resultSet.getLong("class_session_id");
+                    boolean present = resultSet.getBoolean("present");
+                    Integer grade = resultSet.getInt("grade");
+                    ClassSession classSession = new ClassSessionRepository(connection, auditService).get(classSessionId);
+                    classAttendances.add(new ClassAttendance(id, student, classSession, present, grade));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("Class Attendances for Student", student.getId().toString());
         return classAttendances;
     }
 
@@ -88,8 +104,9 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
                 Long classSessionId = resultSet.getLong("class_session_id");
                 boolean present = resultSet.getBoolean("present");
                 Integer grade = resultSet.getInt("grade");
-                Student student = new StudentRepository(connection).get(studentId);
-                ClassSession classSession = new ClassSessionRepository(connection).get(classSessionId);
+                Student student = new StudentRepository(connection, auditService).get(studentId);
+                ClassSession classSession = new ClassSessionRepository(connection, auditService).get(classSessionId);
+                auditService.logGet("Class Attendance", id.toString());
                 return new ClassAttendance(id, student, classSession, present, grade);
             }
         } catch (SQLException e) {
@@ -121,9 +138,14 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
         String query = "UPDATE class_attendances SET present = ?, grade = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setBoolean(1, classAttendance.isPresent());
-            statement.setInt(2, classAttendance.getGrade());
+            if (classAttendance.getGrade() == null) {
+                statement.setNull(2, Types.INTEGER);
+            } else {
+                statement.setInt(2, classAttendance.getGrade());
+            }
             statement.setLong(3, classAttendance.getId());
             statement.executeUpdate();
+            auditService.logUpdate("Class Attendance", classAttendance.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -135,6 +157,7 @@ public class ClassAttendanceRepository implements GenericRepository<ClassAttenda
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
             statement.executeUpdate();
+            auditService.logDelete("Class Attendance", id.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }

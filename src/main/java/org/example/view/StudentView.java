@@ -215,7 +215,6 @@ public class StudentView {
 
     private void updateStudent(Student student) throws InvalidOption, InvalidId {
         while(true) {
-            showUpdatePersonMenu();
             showUpdateStudentMenu();
             int option = readOption();
             int execute = executeStudentUpdateOption(option, student);

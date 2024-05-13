@@ -3,6 +3,7 @@ package org.example.repositories;
 import org.example.models.ClassSession;
 import org.example.models.Course;
 import org.example.models.Group;
+import org.example.services.AuditService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,20 +11,27 @@ import java.util.List;
 
 public class ClassSessionRepository implements GenericRepository<ClassSession> {
     private final Connection connection;
+    private final AuditService auditService;
 
-    public ClassSessionRepository(Connection connection) {
+    public ClassSessionRepository(Connection connection, AuditService auditService) {
         this.connection = connection;
+        this.auditService = auditService;
     }
 
     @Override
     public void add(ClassSession classSession) {
         String query = "INSERT INTO class_sessions (name, course_id, group_id, session_date) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, classSession.getName());
             statement.setLong(2, classSession.getCourse().getId());
             statement.setLong(3, classSession.getGroup().getId());
             statement.setString(4, classSession.getSessionDate().toString());
             statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                classSession.setId(resultSet.getLong(1));
+            }
+            auditService.logAdd("Class Session", classSession.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,6 +57,7 @@ public class ClassSessionRepository implements GenericRepository<ClassSession> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All Class Sessions", null);
         return classSessions;
     }
 
@@ -65,6 +74,7 @@ public class ClassSessionRepository implements GenericRepository<ClassSession> {
                 String sessionDate = resultSet.getString("session_date");
                 Course course = new Course(courseId);
                 Group group = new Group(groupId);
+                auditService.logGet("Class sessions", classId.toString());
                 return new ClassSession(classId, name, course, group, sessionDate);
             }
         } catch (SQLException e) {
@@ -83,6 +93,7 @@ public class ClassSessionRepository implements GenericRepository<ClassSession> {
             statement.setString(4, classSession.getSessionDate().toString());
             statement.setLong(5, classSession.getId());
             statement.executeUpdate();
+            auditService.logUpdate("Class Session", classSession.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,6 +105,7 @@ public class ClassSessionRepository implements GenericRepository<ClassSession> {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, classId);
             statement.executeUpdate();
+            auditService.logDelete("Class session", classId.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }

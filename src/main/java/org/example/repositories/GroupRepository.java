@@ -1,6 +1,7 @@
 package org.example.repositories;
 
 import org.example.models.Group;
+import org.example.services.AuditService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,9 +9,11 @@ import java.util.List;
 
 public class GroupRepository implements GenericRepository<Group> {
     private final Connection connection;
+    private final AuditService auditService;
 
-    public GroupRepository(Connection connection) {
+    public GroupRepository(Connection connection, AuditService auditService) {
         this.connection = connection;
+        this.auditService = auditService;
     }
 
     @Override
@@ -25,6 +28,7 @@ public class GroupRepository implements GenericRepository<Group> {
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     group.setId(generatedKeys.getLong(1));
+                    auditService.logAdd("Group", group.getId().toString());
                 } else {
                     throw new SQLException("Failed to add group, no ID obtained.");
                 }
@@ -47,6 +51,7 @@ public class GroupRepository implements GenericRepository<Group> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All Groups", null);
         return groups;
     }
 
@@ -57,6 +62,7 @@ public class GroupRepository implements GenericRepository<Group> {
             statement.setLong(1, groupId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
+                    auditService.logGet("Group", groupId.toString());
                     return new Group(resultSet.getLong("id"), resultSet.getString("name"));
                 }
             }
@@ -73,6 +79,7 @@ public class GroupRepository implements GenericRepository<Group> {
             statement.setString(1, updatedGroup.getName());
             statement.setLong(2, updatedGroup.getId());
             statement.executeUpdate();
+            auditService.logUpdate("Group", updatedGroup.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -84,6 +91,7 @@ public class GroupRepository implements GenericRepository<Group> {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, groupId);
             statement.executeUpdate();
+            auditService.logDelete("Group", groupId.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }

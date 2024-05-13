@@ -1,31 +1,37 @@
 package org.example.repositories;
 
 import org.example.models.Parent;
+import org.example.services.AuditService;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParentRepository implements GenericRepository<Parent> {
     private final Connection connection;
+    private final AuditService auditService;
 
-    public ParentRepository(Connection connection) {
+
+    public ParentRepository(Connection connection, AuditService auditService) {
         this.connection = connection;
+        this.auditService = auditService;
     }
 
     @Override
     public void add(Parent parent) {
         String sql = "INSERT INTO parents (first_name, last_name, date_of_birth, email, phone_number) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, parent.getFirstName());
             statement.setString(2, parent.getLastName());
             statement.setString(3, parent.getDateOfBirth());
             statement.setString(4, parent.getEmail());
             statement.setString(5, parent.getPhoneNumber());
             statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                parent.setId(resultSet.getLong(1));
+            }
+            auditService.logAdd("Parent", parent.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,6 +57,7 @@ public class ParentRepository implements GenericRepository<Parent> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All Parents", null);
         return parents;
     }
 
@@ -61,6 +68,7 @@ public class ParentRepository implements GenericRepository<Parent> {
             statement.setLong(1, parentId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
+                auditService.logGet("Parent", parentId.toString());
                 return new Parent(
                         resultSet.getLong("id"),
                         resultSet.getString("first_name"),
@@ -87,6 +95,7 @@ public class ParentRepository implements GenericRepository<Parent> {
             statement.setString(5, updatedParent.getPhoneNumber());
             statement.setLong(6, updatedParent.getId());
             statement.executeUpdate();
+            auditService.logUpdate("Parents", updatedParent.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -98,6 +107,7 @@ public class ParentRepository implements GenericRepository<Parent> {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, parentId);
             statement.executeUpdate();
+            auditService.logDelete("Parent", parentId.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }

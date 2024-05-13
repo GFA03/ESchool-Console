@@ -1,6 +1,7 @@
 package org.example.repositories;
 
 import org.example.models.Course;
+import org.example.services.AuditService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,17 +9,20 @@ import java.util.List;
 
 public class CourseRepository implements GenericRepository<Course> {
     private final Connection connection;
+    private final AuditService auditService;
 
-    public CourseRepository(Connection connection) {
+    public CourseRepository(Connection connection, AuditService auditService) {
         this.connection = connection;
+        this.auditService = auditService;
     }
 
     @Override
     public void add(Course course) {
         String query = "INSERT INTO course (name) VALUES (?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, course.getName());
             statement.executeUpdate();
+            auditService.logAdd("Course", course.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -32,6 +36,7 @@ public class CourseRepository implements GenericRepository<Course> {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 String name = resultSet.getString("name");
+                auditService.logGet("Courses", id.toString());
                 return new Course(id, name);
             }
         } catch (SQLException e) {
@@ -54,6 +59,7 @@ public class CourseRepository implements GenericRepository<Course> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All Courses", null);
         return courses;
     }
 
@@ -64,6 +70,7 @@ public class CourseRepository implements GenericRepository<Course> {
             statement.setString(1, course.getName());
             statement.setLong(2, course.getId());
             statement.executeUpdate();
+            auditService.logUpdate("Courses", course.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,6 +82,7 @@ public class CourseRepository implements GenericRepository<Course> {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
             statement.executeUpdate();
+            auditService.logDelete("Courses", id.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }

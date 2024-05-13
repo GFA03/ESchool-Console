@@ -1,6 +1,7 @@
 package org.example.repositories;
 
 import org.example.models.Teacher;
+import org.example.services.AuditService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,9 +9,11 @@ import java.util.List;
 
 public class TeacherRepository implements GenericRepository<Teacher> {
     private final Connection connection;
+    private final AuditService auditService;
 
-    public TeacherRepository(Connection connection) {
+    public TeacherRepository(Connection connection, AuditService auditService) {
         this.connection = connection;
+        this.auditService = auditService;
     }
 
     @Override
@@ -23,6 +26,11 @@ public class TeacherRepository implements GenericRepository<Teacher> {
             statement.setString(4, teacher.getEmail());
             statement.setString(5, teacher.getPhoneNumber());
             int rowsAffected = statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                teacher.setId(resultSet.getLong(1));
+            }
+            auditService.logAdd("Teacher", teacher.getId().toString());
             if (rowsAffected == 0) {
                 throw new SQLException("Failed to add teacher, no rows affected.");
             }
@@ -51,6 +59,7 @@ public class TeacherRepository implements GenericRepository<Teacher> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All Teachers", null);
         return teachers;
     }
 
@@ -61,6 +70,7 @@ public class TeacherRepository implements GenericRepository<Teacher> {
             statement.setLong(1, teacherId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
+                    auditService.logGet("All Teachers", teacherId.toString());
                     return new Teacher(
                             resultSet.getLong("id"),
                             resultSet.getString("first_name"),
@@ -88,6 +98,7 @@ public class TeacherRepository implements GenericRepository<Teacher> {
             statement.setString(5, updatedTeacher.getPhoneNumber());
             statement.setLong(6, updatedTeacher.getId());
             statement.executeUpdate();
+            auditService.logUpdate("Teachers", updatedTeacher.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -99,6 +110,7 @@ public class TeacherRepository implements GenericRepository<Teacher> {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, teacherId);
             statement.executeUpdate();
+            auditService.logDelete("Teachers", teacherId.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }

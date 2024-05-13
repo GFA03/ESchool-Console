@@ -3,6 +3,7 @@ package org.example.repositories;
 import org.example.models.Group;
 import org.example.models.Parent;
 import org.example.models.Student;
+import org.example.services.AuditService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,9 +11,11 @@ import java.util.List;
 
 public class StudentRepository implements GenericRepository<Student> {
     private final Connection connection;
+    private final AuditService auditService;
 
-    public StudentRepository(Connection connection) {
+    public StudentRepository(Connection connection, AuditService auditService) {
         this.connection = connection;
+        this.auditService = auditService;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class StudentRepository implements GenericRepository<Student> {
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     student.setId(generatedKeys.getLong(1));
+                    auditService.logAdd("Student", student.getId().toString());
                 } else {
                     throw new SQLException("Failed to add student, no ID obtained.");
                 }
@@ -69,17 +73,18 @@ public class StudentRepository implements GenericRepository<Student> {
                 );
                 long parentId = resultSet.getLong("parent_id");
                 if (!resultSet.wasNull()) {
-                    student.setParent(new ParentRepository(connection).get(parentId));
+                    student.setParent(new ParentRepository(connection, auditService).get(parentId));
                 }
                 long groupId = resultSet.getLong("group_id");
                 if (!resultSet.wasNull()) {
-                    student.setGroup(new GroupRepository(connection).get(groupId));
+                    student.setGroup(new GroupRepository(connection, auditService).get(groupId));
                 }
                 students.add(student);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All Students", null);
         return students;
     }
 
@@ -102,12 +107,13 @@ public class StudentRepository implements GenericRepository<Student> {
                     );
                     long parentId = resultSet.getLong("parent_id");
                     if (!resultSet.wasNull()) {
-                        student.setParent(new ParentRepository(connection).get(parentId));
+                        student.setParent(new ParentRepository(connection, auditService).get(parentId));
                     }
                     long groupId = resultSet.getLong("group_id");
                     if (!resultSet.wasNull()) {
-                        student.setGroup(new GroupRepository(connection).get(groupId));
+                        student.setGroup(new GroupRepository(connection, auditService).get(groupId));
                     }
+                    auditService.logGet("Student", student.getId().toString());
                     return student;
                 }
             }
@@ -137,13 +143,14 @@ public class StudentRepository implements GenericRepository<Student> {
                 );
                 long groupId = resultSet.getLong("group_id");
                 if (!resultSet.wasNull()) {
-                    student.setGroup(new GroupRepository(connection).get(groupId));
+                    student.setGroup(new GroupRepository(connection, auditService).get(groupId));
                 }
                 students.add(student);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All students by a parent", null);
         return students;
     }
 
@@ -167,13 +174,14 @@ public class StudentRepository implements GenericRepository<Student> {
                 );
                 long parentId = resultSet.getLong("parent_id");
                 if (!resultSet.wasNull()) {
-                    student.setParent(new ParentRepository(connection).get(parentId));
+                    student.setParent(new ParentRepository(connection, auditService).get(parentId));
                 }
                 students.add(student);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        auditService.logGet("All students by group", null);
         return students;
     }
 
@@ -198,6 +206,7 @@ public class StudentRepository implements GenericRepository<Student> {
             }
             statement.setLong(8, updatedStudent.getId());
             statement.executeUpdate();
+            auditService.logUpdate("Student", updatedStudent.getId().toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -209,6 +218,7 @@ public class StudentRepository implements GenericRepository<Student> {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, studentId);
             statement.executeUpdate();
+            auditService.logDelete("Student", studentId.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
