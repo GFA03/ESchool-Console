@@ -9,8 +9,8 @@ import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
-        AuditService auditService = new AuditService("/home/gfa/Desktop/FMI-Unibuc-Work/An2/Semestrul2/PAO/Project/ESchool-System/audit.csv");
-        DatabaseManager databaseManager = new DatabaseManager();
+        AuditService auditService = AuditService.getInstance("/home/gfa/Desktop/FMI-Unibuc-Work/An2/Semestrul2/PAO/Project/ESchool-System/audit.csv");
+        DatabaseManager databaseManager = DatabaseManager.getInstance();
         try {
             Connection connection = databaseManager.getConnection();
 

@@ -6,11 +6,18 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 
 public class AuditService {
-
+    private static AuditService instance;
     private final String filePath;
 
-    public AuditService(String filePath) {
+    private AuditService(String filePath) {
         this.filePath = filePath;
+    }
+
+    public static AuditService getInstance(String filePath) {
+        if (instance == null) {
+            instance = new AuditService(filePath);
+        }
+        return instance;
     }
 
     private void writeAuditLog(String operation, String entity, String details) {
