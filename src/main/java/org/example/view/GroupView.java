@@ -69,6 +69,10 @@ public class GroupView {
     }
 
     private void showAllGroups() {
+        if (groupService.getAllGroups().isEmpty()) {
+            System.out.println("No groups found.");
+            return;
+        }
         System.out.println(groupService.getAllGroups());
     }
 

@@ -100,7 +100,6 @@ public class ConsoleApp {
         view.run();
     }
 
-//TODO: Make each view Singleton
     private void manageParents() {
         ParentView view = new ParentView(parentService, studentService);
         view.run();
@@ -124,7 +123,7 @@ public class ConsoleApp {
     }
 
     private void manageClassAttendances() {
-        ClassAttendanceView view = new ClassAttendanceView(classAttendanceService, classSessionService);
+        ClassAttendanceView view = new ClassAttendanceView(classAttendanceService);
         view.run();
     }
 
@@ -161,7 +160,7 @@ public class ConsoleApp {
         groupService.addGroup(group3);
         groupService.addGroup(group4);
     }
-//TODO: If there is none in getSize and you print all, print "There is none"
+
     private void populateCourses() {
         if (courseService.getSize() != 0) {
             return;

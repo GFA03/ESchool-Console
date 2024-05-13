@@ -82,7 +82,12 @@ public class ClassSessionView {
     }
 
     private void showAllClassSessions() {
-        System.out.println(classSessionService.getAllClassSessions());
+        if (!classSessionService.getAllClassSessions().isEmpty()) {
+            System.out.println(classSessionService.getAllClassSessions());
+        }
+        else {
+            System.out.println("No class sessions found.");
+        }
     }
 
     private void showClassSessionById() throws InvalidId {

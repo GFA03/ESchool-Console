@@ -76,6 +76,10 @@ public class ParentView {
     }
 
     private void showAllParents() {
+        if (parentService.getAllParents().isEmpty()) {
+            System.out.println("No parents found.");
+            return;
+        }
         System.out.println(parentService.getAllParents());
     }
 
@@ -126,10 +130,10 @@ public class ParentView {
             }
         }
     }
-//TODO: find class for readParent
+
     private Parent readParent() throws InvalidId, InvalidRequest {
         if (parentService.getSize() == 0)
-            throw new InvalidRequest("Invalid request! There are no parent!");
+            throw new InvalidRequest("Invalid request! There are no parents!");
         while (true) {
             Long parentId = readLong("Enter parent id:");
             if(parentService.getParentById(parentId) != null)

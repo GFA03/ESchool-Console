@@ -67,6 +67,10 @@ public class CourseView {
     }
 
     private void showAllCourses() {
+        if (courseService.getAllCourses().isEmpty()) {
+            System.out.println("No courses found!");
+            return;
+        }
         System.out.println(courseService.getAllCourses());
     }
 

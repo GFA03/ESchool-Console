@@ -80,6 +80,10 @@ public class GroupCourseView {
     }
 
     private void showAllGroupCourses() {
+        if (groupCourseService.getAllGroupCourses().isEmpty()) {
+            System.out.println("No group courses found.");
+            return;
+        }
         System.out.println(groupCourseService.getAllGroupCourses());
     }
 

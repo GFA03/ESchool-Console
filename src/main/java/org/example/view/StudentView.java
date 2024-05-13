@@ -11,7 +11,6 @@ import org.example.models.Student;
 import org.example.services.*;
 
 import static org.example.utils.ReaderUtils.*;
-import static org.example.view.ConsoleApp.showUpdatePersonMenu;
 import static org.example.view.ConsoleApp.showUpdateStudentMenu;
 
 public class StudentView {
@@ -58,7 +57,7 @@ public class StudentView {
     private int executeStudentsOptions(int option) throws InvalidId, InvalidRequest {
         switch (option) {
             case 1:
-                System.out.println(studentService.getAllStudents());
+                showAllStudents();
                 break;
             case 2:
                 showStudent();
@@ -80,6 +79,14 @@ public class StudentView {
                 System.out.println("Invalid choice. Please enter a valid option.");
         }
         return 0;
+    }
+
+    private void showAllStudents() {
+        if (studentService.getAllStudents().isEmpty()) {
+            System.out.println("There are no students");
+            return;
+        }
+        System.out.println(studentService.getAllStudents());
     }
 
     private void showStudent() throws InvalidId {

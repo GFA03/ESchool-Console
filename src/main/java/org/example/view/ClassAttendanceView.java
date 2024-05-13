@@ -12,11 +12,9 @@ import static org.example.utils.ReaderUtils.*;
 
 public class ClassAttendanceView {
     private final ClassAttendanceService classAttendanceService;
-    private final ClassSessionService classSessionService;
 
-    public ClassAttendanceView(ClassAttendanceService classAttendanceService, ClassSessionService classSessionService) {
+    public ClassAttendanceView(ClassAttendanceService classAttendanceService) {
         this.classAttendanceService = classAttendanceService;
-        this.classSessionService = classSessionService;
     }
 
     public void run() {
@@ -63,7 +61,11 @@ public class ClassAttendanceView {
     }
 
     private void showAllClassAttendances() {
-        System.out.println(classAttendanceService.getAllClassAttendances());
+        if (!classAttendanceService.getAllClassAttendances().isEmpty()) {
+            System.out.println(classAttendanceService.getAllClassAttendances());
+        } else {
+            System.out.println("There are no class attendances");
+        }
     }
 
     private void showClassAttendanceById() throws InvalidId {
@@ -73,15 +75,6 @@ public class ClassAttendanceView {
             System.out.println(classAttendance);
         else
             System.out.println("Class attendance doesn't exist!");
-    }
-
-    private ClassSession getClassSession() throws InvalidId {
-        while (true) {
-            Long classSessionId = readLong("Enter class session id:");
-            if(classSessionService.getClassSessionById(classSessionId) != null)
-                return classSessionService.getClassSessionById(classSessionId);
-            System.out.println("Invalid class session id! Please try again!");
-        }
     }
 
     private void updateClassAttendance() throws InvalidId {
