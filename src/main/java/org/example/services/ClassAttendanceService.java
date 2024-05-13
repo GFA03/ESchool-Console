@@ -55,10 +55,6 @@ public class ClassAttendanceService {
         classAttendanceRepository.update(updatedClassAttendance);
     }
 
-    public void deleteClassAttendance(Long id) {
-        classAttendanceRepository.delete(id);
-    }
-
     public int getSize() {
         return classAttendanceRepository.getSize();
     }

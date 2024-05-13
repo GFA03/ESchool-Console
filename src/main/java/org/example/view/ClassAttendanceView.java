@@ -39,7 +39,6 @@ public class ClassAttendanceView {
         System.out.println("1. Show all class attendances");
         System.out.println("2. Show class attendance by ID");
         System.out.println("3. Update class attendance");
-        System.out.println("4. Delete class attendance by ID");
         System.out.println("9. Exit");
     }
 
@@ -53,9 +52,6 @@ public class ClassAttendanceView {
                 break;
             case 3:
                 updateClassAttendance();
-                break;
-            case 4:
-                deleteClassAttendanceById();
                 break;
             case 9:
                 System.out.println("Exiting...");
@@ -102,20 +98,6 @@ public class ClassAttendanceView {
             classAttendance.setGrade(grade);
             classAttendanceService.updateClassAttendance(classAttendance);
             System.out.println("Class attendance updated successfully!");
-        } else {
-            System.out.println("Class attendance ID incorrect!");
-        }
-    }
-
-
-
-
-    private void deleteClassAttendanceById() throws InvalidId {
-        Long classAttendanceId = readLong("Enter class attendance ID:");
-        ClassAttendance classAttendance = classAttendanceService.getClassAttendance(classAttendanceId);
-        if (classAttendance != null) {
-            classAttendanceService.deleteClassAttendance(classAttendanceId);
-            System.out.println("Class attendance deleted successfully!");
         } else {
             System.out.println("Class attendance ID incorrect!");
         }
