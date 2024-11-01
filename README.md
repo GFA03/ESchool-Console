@@ -25,6 +25,6 @@ Welcome to the ESchool Console Application! This application provides a simple w
 - [x] A Main class from which calls are made to services
 
 ### Stage 2
-- [ ] Extend the project from the first stage by implementing persistence using a relational database and JDBC.
+- [x] Extend the project from the first stage by implementing persistence using a relational database and JDBC.
 
-- [ ] Implement an audit service.
+- [x] Implement an audit service.
